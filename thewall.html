@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patrick Creations — Lookbook</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Masonry Layout -->
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"></script>
+    
+    <!-- ImagesLoaded -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/imagesloaded/5.0.0/imagesloaded.pkgd.min.js"></script>
+    
+    <style>
+        :root {
+            --bg: #fff; 
+            --fg: #0b0b0b; 
+            --muted: rgba(11,11,11,0.1); 
+            --accent-weak: rgba(11,11,11,0.06);
+            --label-opacity: 0.92;
+        }
+        .dark-theme { 
+            --bg: #0b0b0b; 
+            --fg: #fff; 
+            --muted: rgba(255,255,255,0.06); 
+            --accent-weak: rgba(255,255,255,0.03); 
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, sans-serif;
+            overflow-x: hidden;
+            background: var(--bg);
+            color: var(--fg);
+            transition: .35s;
+        }
+        
+        .topbar {
+            height: 72px;
+            position: fixed;
+            top: 0;
+            inset-inline: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            z-index: 60;
+            background: var(--bg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 380px;
+            height: 100vh;
+            background: var(--bg);
+            color: var(--fg);
+            box-shadow: -18px 0 40px rgba(0,0,0,0.08);
+            transition: right .45s;
+            z-index: 80;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .sidebar.open {
+            right: 0;
+        }
+        
+        .nav-links a {
+            display: block;
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin: 1rem 0;
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .toggle {
+            width: 54px;
+            height: 30px;
+            border-radius: 999px;
+            padding: 4px;
+            position: relative;
+            cursor: pointer;
+            background: var(--accent-weak);
+            display: inline-flex;
+            align-items: center;
+            transition: .25s;
+        }
+        
+        .toggle .knob {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--bg);
+            transition: .28s;
+            transform: translateX(0);
+        }
+        
+        .toggle.on {
+            background: var(--fg);
+        }
+        
+        .toggle.on .knob {
+            transform: translateX(24px);
+            background: var(--bg);
+        }
+        
+        /* Lookbook specific styles */
+        .lookbook-hero {
+            height: 70vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 72px;
+        }
+        
+        .lookbook-title {
+            font-family: Cinzel, serif;
+            font-size: clamp(36px, 8vw, 120px);
+            text-align: center;
+            margin-bottom: 1rem;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+        }
+        
+        .lookbook-subtitle {
+            font-size: clamp(14px, 1.5vw, 18px);
+            text-align: center;
+            opacity: 0.7;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+        
+        /* Filter controls */
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 2rem 1rem;
+            background: var(--bg);
+            border-bottom: 1px solid var(--accent-weak);
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 999px;
+            background: var(--accent-weak);
+            border: none;
+            color: var(--fg);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--fg);
+            color: var(--bg);
+        }
+        
+        /* Masonry grid - FIXED */
+        .masonry-grid {
+            padding: 0 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .grid-sizer {
+            width: calc(33.333% - 1rem);
+        }
+        
+        .grid-item {
+            width: calc(33.333% - 1rem);
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.4s, box-shadow 0.4s;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .grid-item:nth-child(1) { animation-delay: 0.1s; }
+        .grid-item:nth-child(2) { animation-delay: 0.2s; }
+        .grid-item:nth-child(3) { animation-delay: 0.3s; }
+        .grid-item:nth-child(4) { animation-delay: 0.4s; }
+        .grid-item:nth-child(5) { animation-delay: 0.5s; }
+        .grid-item:nth-child(6) { animation-delay: 0.6s; }
+        .grid-item:nth-child(7) { animation-delay: 0.7s; }
+        .grid-item:nth-child(8) { animation-delay: 0.8s; }
+        .grid-item:nth-child(9) { animation-delay: 0.9s; }
+        .grid-item:nth-child(10) { animation-delay: 1.0s; }
+        .grid-item:nth-child(11) { animation-delay: 1.1s; }
+        .grid-item:nth-child(12) { animation-delay: 1.2s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .grid-sizer, .grid-item { 
+                width: calc(50% - 1rem); 
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .grid-sizer, .grid-item { 
+                width: 100%; 
+            }
+        }
+        
+        .grid-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .grid-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.6s, filter 0.6s;
+            background: #f5f5f5;
+        }
+        
+        .grid-item:hover .grid-img {
+            transform: scale(1.05);
+        }
+        
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+            color: white;
+        }
+        
+        .grid-item:hover .grid-overlay {
+            opacity: 1;
+        }
+        
+        .grid-title {
+            font-family: Cinzel, serif;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .grid-desc {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .color-palette {
+            display: flex;
+            margin-top: 0.75rem;
+            gap: 4px;
+        }
+        
+        .color-swatch {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+        }
+        
+        .modal.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            position: relative;
+        }
+        
+        .modal-img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 8px;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        
+        .modal-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 2rem;
+            color: white;
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--fg);
+            color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 99;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        
+        footer {
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-top: 1px solid var(--accent-weak);
+            margin-top: 3rem;
+        }
+        
+        footer img {
+            height: 56px;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+
+        /* Loading optimization */
+        .grid-img {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="logo flex items-center gap-3">
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="Logo"/>
+        <div class="hidden md:block">
+            <div class="font-bold text-sm">Patrick Creations</div>
+            <div class="text-xs opacity-60">Another Patrick Creation</div>
+        </div>
+    </div>
+    <button id="hamburger" class="p-2 text-2xl">☰</button>
+</header>
+
+<aside id="sidebar" class="sidebar">
+    <div>
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <img src="https://i.imgur.com/xvqBrl0.png" alt="logo" class="h-10"/>
+                <div>
+                    <div class="font-bold text-lg">Patrick Creations</div>
+                    <div class="text-xs opacity-60">Navigation</div>
+                </div>
+            </div>
+            <button id="sidebarClose">✕</button>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="movies_list.html">Productions</a>
+            <a href="about.html">About</a>
+            <a href="contactus.html">Contact</a>
+        </nav>
+        <div class="mt-6">
+            <div class="text-xs opacity-80 mb-1">Theme</div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm opacity-80">Light</span>
+                <div id="themeSwitch" class="toggle"><div class="knob"></div></div>
+                <span class="text-sm opacity-80">Dark</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<main>
+    <!-- Lookbook Hero -->
+    <section class="lookbook-hero">
+        <div class="text-center">
+            <h1 class="lookbook-title">THE WALL</h1>
+            <p class="lookbook-subtitle">From cave walls to cinema screens, humanity has always stopped to admire images. It is how we remember, connect, and understand ourselves.</p>
+        </div>
+    </section>
+
+    <!-- Filter Controls -->
+    <div class="filter-controls">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="behind-scenes">Behind Scenes</button>
+        <button class="filter-btn" data-filter="stills">Stills</button>
+        <button class="filter-btn" data-filter="production-design">Production Design</button>
+        <button class="filter-btn" data-filter="photoshoot">Photoshoot</button>
+        <button class="filter-btn" data-filter="concept-art">Concept Art</button>
+    </div>
+
+    <!-- Masonry Grid - FIXED -->
+    <div class="masonry-grid" id="lookbook-grid">
+        <!-- Grid sizer for masonry -->
+        <div class="grid-sizer"></div>
+        
+        <!-- Item 1: Still from The Brilliant Boy -->
+        <div class="grid-item" data-category="stills">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759572607/TBB.00_03_07_12.Still006_tokxck.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">Still from The Brilliant Boy</h3>
+                <p class="grid-desc">Stills — The Brilliant Boy</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #203040"></div>
+                    <div class="color-swatch" style="background: #C48A2C"></div>
+                    <div class="color-swatch" style="background: #E6DACD"></div>
+                    <div class="color-swatch" style="background: #5A5350"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Item 2: Still from The Brilliant Boy -->
+        <div class="grid-item" data-category="stills">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759572607/TBB.00_01_55_19.Still003_ek8wgk.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">Still from The Brilliant Boy</h3>
+                <p class="grid-desc">Stills — The Brilliant Boy</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #2C2E33"></div>
+                    <div class="color-swatch" style="background: #B58346"></div>
+                    <div class="color-swatch" style="background: #D9C4A3"></div>
+                    <div class="color-swatch" style="background: #5E5C56"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Item 3: Still from The Brilliant Boy -->
+        <div class="grid-item" data-category="stills">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759572607/TBB.00_03_09_01.Still005_ksauyl.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">Still from The Brilliant Boy</h3>
+                <p class="grid-desc">Stills — The Brilliant Boy</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #23272C"></div>
+                    <div class="color-swatch" style="background: #C59763"></div>
+                    <div class="color-swatch" style="background: #E0D4C5"></div>
+                    <div class="color-swatch" style="background: #56514B"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Item 4: The Brilliant Boy Newspaper Art -->
+        <div class="grid-item" data-category="concept-art">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759574955/Untitled_design_4_soxufy.png" alt="The Brilliant Boy Newspaper Art" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">The Brilliant Boy Newspaper Art</h3>
+                <p class="grid-desc">Concept Art — The Brilliant Boy</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #1C1C1C"></div>
+                    <div class="color-swatch" style="background: #D4C6B9"></div>
+                    <div class="color-swatch" style="background: #ECECEB"></div>
+                    <div class="color-swatch" style="background: #8F8B87"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Item 5: Oil&Water Set -->
+        <div class="grid-item" data-category="production-design">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759575559/IMG_1538_lg6o34.jpg" alt="Oil&Water Set" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">Oil&amp;Water Set</h3>
+                <p class="grid-desc">Production Design — The Brilliant Boy</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #3A3F4A"></div>
+                    <div class="color-swatch" style="background: #9AA3AB"></div>
+                    <div class="color-swatch" style="background: #E8E3DC"></div>
+                    <div class="color-swatch" style="background: #6D6058"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Item 6: Good Day for a Shoot -->
+        <div class="grid-item" data-category="behind-scenes">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759575764/IMG_1650_drqhi0.jpg" alt="Behind the Scenes" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">Good Day for a Shoot</h3>
+                <p class="grid-desc">Behind the Scenes</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #D8CBB3"></div>
+                    <div class="color-swatch" style="background: #A48B72"></div>
+                    <div class="color-swatch" style="background: #6E5844"></div>
+                    <div class="color-swatch" style="background: #3C2F25"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Item 7: Oil&Water Set -->
+        <div class="grid-item" data-category="production-design behind-scenes">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759575764/IMG_1585_eafbve.jpg" alt="Oil&Water Set" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">Oil&Water Set</h3>
+                <p class="grid-desc">Production Design / Behind Scenes</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #5F594F"></div>
+                    <div class="color-swatch" style="background: #B2A596"></div>
+                    <div class="color-swatch" style="background: #DAD3CB"></div>
+                    <div class="color-swatch" style="background: #3E3A36"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Item 8: The Patrick Creations Family -->
+        <div class="grid-item" data-category="behind-scenes">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759576147/IMG_1552_ek3oj4.jpg" alt="The Patrick Creations Family" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">The Patrick Creations Family</h3>
+                <p class="grid-desc">Behind Scenes</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #3F3A36"></div>
+                    <div class="color-swatch" style="background: #8B7E74"></div>
+                    <div class="color-swatch" style="background: #C9BEAF"></div>
+                    <div class="color-swatch" style="background: #6E645A"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Item 9: Next time you will not sleep on set -->
+        <div class="grid-item" data-category="behind-scenes">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759576156/IMG_1510_ghdyj6.jpg" alt="Next time you will not sleep on set" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">Next time you will not sleep on set</h3>
+                <p class="grid-desc">Behind Scenes</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #2F2C2A"></div>
+                    <div class="color-swatch" style="background: #8A7F70"></div>
+                    <div class="color-swatch" style="background: #CFC3B6"></div>
+                    <div class="color-swatch" style="background: #6E655C"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 10: Production Design Detail -->
+        <div class="grid-item" data-category="production-design">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759575764/IMG_1585_eafbve.jpg" alt="Production Design Detail" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">Production Design Detail</h3>
+                <p class="grid-desc">Set Design Elements</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #4A4A4A"></div>
+                    <div class="color-swatch" style="background: #A8A8A8"></div>
+                    <div class="color-swatch" style="background: #E8E8E8"></div>
+                    <div class="color-swatch" style="background: #2C2C2C"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Item 11: Behind the Scenes Moment -->
+        <div class="grid-item" data-category="behind-scenes">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759576147/IMG_1552_ek3oj4.jpg" alt="Behind the Scenes Moment" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">Behind the Scenes Moment</h3>
+                <p class="grid-desc">Capturing the Process</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #5D5D5D"></div>
+                    <div class="color-swatch" style="background: #B8B8B8"></div>
+                    <div class="color-swatch" style="background: #F0F0F0"></div>
+                    <div class="color-swatch" style="background: #3A3A3A"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Item 12: Cinematic Still -->
+        <div class="grid-item" data-category="stills">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759572607/TBB.00_03_07_12.Still006_tokxck.jpg" alt="Cinematic Still" class="grid-img" loading="lazy">
+            <div class="grid-overlay">
+                <h3 class="grid-title">Cinematic Still</h3>
+                <p class="grid-desc">Mood and Atmosphere</p>
+                <div class="color-palette">
+                    <div class="color-swatch" style="background: #1A1A1A"></div>
+                    <div class="color-swatch" style="background: #6B6B6B"></div>
+                    <div class="color-swatch" style="background: #C9C9C9"></div>
+                    <div class="color-swatch" style="background: #4D4D4D"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">✕</button>
+            <img src="" alt="" class="modal-img" id="modalImage">
+            <div class="modal-info">
+                <h3 id="modalTitle"></h3>
+                <p id="modalDesc"></p>
+                <div class="color-palette" id="modalPalette"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        ↑
+    </div>
+
+    <footer>
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="logo">
+        <p class="font-bold">Patrick Creations</p>
+        <p class="opacity-70">Contact: <a href="mailto:emmanuelowochiopatrick@gmail.com" class="underline">emmanuelowochiopatrick@gmail.com</a> | <a href="tel:+2348163696389" class="underline">+234 816 369 6389</a></p>
+        <p class="font-bold opacity-80">Another Patrick Creation</p>
+        <p class="opacity-60">Emmanuel Patrick, Muneer Abdulkadir, Chidalu Okeke</p>
+        <p class="opacity-40">&copy; 2025 Patrick Creations. All rights reserved.</p>
+    </footer>
+</main>
+
+<script>
+    // Initialize Masonry - FIXED
+    document.addEventListener('DOMContentLoaded', function() {
+        const grid = document.getElementById('lookbook-grid');
+        let masonry;
+        
+        // Initialize masonry after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            masonry = new Masonry(grid, {
+                itemSelector: '.grid-item',
+                columnWidth: '.grid-sizer',
+                percentPosition: true,
+                gutter: 16,
+                transitionDuration: '0.3s'
+            });
+            
+            // Use imagesLoaded with proper configuration
+            imagesLoaded(grid, function() {
+                masonry.layout();
+                
+                // Multiple layout calls to ensure proper positioning
+                setTimeout(() => masonry.layout(), 100);
+                setTimeout(() => masonry.layout(), 300);
+                setTimeout(() => masonry.layout(), 600);
+            });
+        }, 100);
+        
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active state
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const filter = button.getAttribute('data-filter');
+                
+                // Show all if "all" is selected
+                if (filter === 'all') {
+                    document.querySelectorAll('.grid-item').forEach(item => {
+                        item.style.display = 'block';
+                    });
+                } else {
+                    // Hide items that don't match the filter
+                    document.querySelectorAll('.grid-item').forEach(item => {
+                        const cats = item.getAttribute('data-category') || '';
+                        if (cats.includes(filter)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
+                
+                // Re-layout masonry after filtering with proper timing
+                if (masonry) {
+                    setTimeout(() => {
+                        masonry.layout();
+                    }, 50);
+                    setTimeout(() => {
+                        masonry.layout();
+                    }, 200);
+                }
+            });
+        });
+        
+        // Modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
+        const modalPalette = document.getElementById('modalPalette');
+        const modalClose = document.getElementById('modalClose');
+        
+        document.querySelectorAll('.grid-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                const title = item.querySelector('.grid-title').textContent;
+                const desc = item.querySelector('.grid-desc').textContent;
+                const paletteHTML = item.querySelector('.color-palette').innerHTML;
+                
+                modalImage.src = img.src;
+                modalTitle.textContent = title;
+                modalDesc.textContent = desc;
+                modalPalette.innerHTML = paletteHTML;
+                
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        modalClose.addEventListener('click', () => {
+            modal.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('open');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Back to top functionality
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Window resize handler to re-layout masonry
+        window.addEventListener('resize', function() {
+            if (masonry) {
+                setTimeout(() => masonry.layout(), 100);
+            }
+        });
+        
+        // Force layout on window load
+        window.addEventListener('load', function() {
+            if (masonry) {
+                setTimeout(() => masonry.layout(), 500);
+                setTimeout(() => masonry.layout(), 1000);
+            }
+        });
+    });
+    
+    // Existing functionality from your code
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarClose = document.getElementById('sidebarClose');
+    hamburger.addEventListener('click', () => sidebar.classList.add('open'));
+    sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
+
+    // Theme toggle
+    const themeSwitch = document.getElementById('themeSwitch');
+    themeSwitch.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark-theme');
+        themeSwitch.classList.toggle('on');
+    });
+</script>
+
+</body>
+</html>

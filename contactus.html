@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Patrick Creations</title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg:#fff; --fg:#0b0b0b; --muted:rgba(11,11,11,0.1); --accent-weak:rgba(11,11,11,0.06);
+      --label-opacity:0.92;
+    }
+    .dark-theme { --bg:#0b0b0b; --fg:#fff; --muted:rgba(255,255,255,0.06); --accent-weak:rgba(255,255,255,0.03); }
+    html,body{height:100%;margin:0;font-family:Inter,sans-serif;overflow-x:hidden;background:var(--bg);color:var(--fg);transition:.35s}
+    
+    /* Topbar and sidebar styles from index page */
+    .topbar{height:72px;position:fixed;top:0;inset-inline:0;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;z-index:60;background:transparent;backdrop-filter:blur(4px);}
+    .logo img{height:40px;width:auto;}
+    .sidebar{position:fixed;top:0;right:-420px;width:380px;height:100vh;background:var(--bg);color:var(--fg);box-shadow:-18px 0 40px rgba(0,0,0,0.08);transition:right .45s;z-index:80;padding:3rem 2rem;display:flex;flex-direction:column;justify-content:space-between;}
+    .sidebar.open{right:0;}
+    .nav-links a{display:block;font-weight:800;font-size:1.25rem;margin:1rem 0;color:inherit;text-decoration:none;}
+    .toggle{width:54px;height:30px;border-radius:999px;padding:4px;position:relative;cursor:pointer;background:var(--accent-weak);display:inline-flex;align-items:center;transition:.25s;}
+    .toggle .knob{width:22px;height:22px;border-radius:50%;background:var(--bg);transition:.28s;transform:translateX(0);}
+    .toggle.on{background:var(--fg);}
+    .toggle.on .knob{transform:translateX(24px);background:var(--bg);}
+    
+    /* Modified menu button styles */
+    #hamburger {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.25rem;
+      z-index: 70;
+      background: transparent;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      width: auto;
+      color: var(--fg);
+      transition: opacity 0.3s;
+    }
+    
+    #hamburger:hover {
+      opacity: 0.7;
+      background: transparent !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+    
+    #sidebarClose {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      color: var(--fg);
+      transition: opacity 0.3s;
+    }
+    
+    #sidebarClose:hover {
+      opacity: 0.7;
+      background: transparent !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+    
+    /* Contact page specific styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        background-color: #f9f9f6;
+        color: #000;
+        line-height: 1.6;
+        background-image: url(IMG_5491.JPG);
+        background-size: cover;
+        background-position: center 35%;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        position: relative;
+        min-height: 100vh;
+        overflow-x: hidden;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark-theme {
+        background-color: #111;
+        color: #fff;
+    }
+    
+    /* Subtle edge framing rectangles */
+    .edge-frame {
+        position: fixed;
+        border: 1px solid;
+        opacity: 0.1;
+        z-index: 0;
+        pointer-events: none;
+    }
+    
+    .frame-1 {
+        width: 150px;
+        height: 100px;
+        top: 5%;
+        left: 3%;
+        border-color: #000;
+        transform: rotate(10deg);
+    }
+    
+    .frame-2 {
+        width: 120px;
+        height: 80px;
+        bottom: 5%;
+        right: 3%;
+        border-color: #000;
+        transform: rotate(-8deg);
+    }
+    
+    .frame-3 {
+        width: 100px;
+        height: 120px;
+        top: 50%;
+        right: 2%;
+        border-color: #000;
+        transform: translateY(-50%) rotate(5deg);
+    }
+    
+    .frame-4 {
+        width: 110px;
+        height: 70px;
+        bottom: 15%;
+        left: 3%;
+        border-color: #000;
+        transform: rotate(-12deg);
+    }
+    
+    body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            ellipse at center,
+            rgba(255,255,255,0.6) 0%,
+            rgba(255,255,255,0.8) 100%
+        );
+        z-index: -1;
+    }
+
+    body.dark-theme::before {
+        background: radial-gradient(
+            ellipse at center,
+            rgba(0,0,0,0.6) 0%,
+            rgba(0,0,0,0.8) 100%
+        );
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 100px 20px 50px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        color: var(--fg);
+        letter-spacing: 2px;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 700px;
+        margin: 0 auto 30px;
+        line-height: 1.7;
+        color: var(--fg);
+    }
+    
+    .content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 50px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .newsletter {
+        flex: 1;
+        min-width: 300px;
+        max-width: 500px;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 35px;
+        border-radius: 8px;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .dark-theme .newsletter {
+        background-color: rgba(17, 17, 17, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    
+    .newsletter-heading {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: var(--fg);
+        position: relative;
+        display: inline-block;
+    }
+    
+    .newsletter-heading::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: var(--fg);
+    }
+    
+    .newsletter-subheading {
+        font-size: 1rem;
+        opacity: 0.8;
+        margin-bottom: 30px;
+        line-height: 1.6;
+        color: var(--fg);
+    }
+    
+    .form-group {
+        margin-bottom: 22px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--fg);
+    }
+    
+    input, textarea {
+        width: 100%;
+        padding: 14px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        color: var(--fg);
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+
+    .dark-theme input,
+    .dark-theme textarea {
+        background-color: rgba(34, 34, 34, 0.95);
+        border: 1px solid #444;
+        color: #fff;
+    }
+    
+    input::placeholder,
+    textarea::placeholder {
+        color: #666;
+        opacity: 0.8;
+    }
+
+    .dark-theme input::placeholder,
+    .dark-theme textarea::placeholder {
+        color: #aaa;
+    }
+    
+    input:focus, textarea:focus {
+        outline: none;
+        border-color: var(--fg);
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-theme input:focus,
+    .dark-theme textarea:focus {
+        border-color: #fff;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+    
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    button.submit-btn {
+        background: var(--fg);
+        color: var(--bg);
+        border: none;
+        padding: 14px 30px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        letter-spacing: 0.5px;
+    }
+    
+    button.submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .dark-theme button.submit-btn:hover {
+        box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+    }
+    
+    .contact-info {
+        flex: 1;
+        min-width: 300px;
+        max-width: 500px;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 35px;
+        border-radius: 8px;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .dark-theme .contact-info {
+        background-color: rgba(17, 17, 17, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    
+    .info-heading {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: var(--fg);
+        position: relative;
+        display: inline-block;
+    }
+    
+    .info-heading::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: var(--fg);
+    }
+    
+    .info-item {
+        margin-bottom: 25px;
+    }
+    
+    .info-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--fg);
+    }
+    
+    .info-content {
+        color: var(--fg);
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+    
+    .email-link {
+        color: var(--fg);
+        text-decoration: none;
+        transition: all 0.3s;
+        display: inline-block;
+        position: relative;
+    }
+    
+    .email-link:hover {
+        color: #555;
+        transform: translateX(3px);
+    }
+
+    .dark-theme .email-link:hover {
+        color: #ccc;
+    }
+    
+    .email-link::after {
+        content: '\f0e0';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        margin-left: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+    }
+    
+    .social-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        color: var(--fg);
+        font-size: 1.1rem;
+        border: 1px solid var(--fg);
+    }
+
+    .dark-theme .social-icon {
+        background-color: rgba(34, 34, 34, 0.9);
+        color: #fff;
+        border: 1px solid #fff;
+    }
+    
+    .social-icon:hover {
+        background-color: var(--fg);
+        color: var(--bg);
+        transform: translateY(-3px);
+    }
+
+    .dark-theme .social-icon:hover {
+        background-color: #fff;
+        color: #000;
+    }
+    
+    .divider {
+        height: 1px;
+        background: var(--fg);
+        margin: 50px 0;
+        opacity: 0.2;
+    }
+    
+    footer {
+        text-align: center;
+        opacity: 0.8;
+        font-size: 0.9rem;
+        color: var(--fg);
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .dark-theme footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2.5rem;
+        }
+        
+        .content {
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        .newsletter, .contact-info {
+            padding: 30px;
+        }
+        
+        body {
+            background-attachment: scroll;
+            background-position: center 25%;
+        }
+        
+        .edge-frame {
+            display: none;
+        }
+        
+        .container {
+            padding-top: 120px;
+        }
+        
+        #hamburger {
+            top: 1rem;
+            right: 1rem;
+        }
+    }
+  </style>
+
+  <!-- MailerLite Form Styles -->
+  <style type="text/css">@import url("https://assets.mlcdn.com/fonts.css?version=1754926");</style>
+  <style type="text/css">
+    /* LOADER */
+    .ml-form-embedSubmitLoad {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+    }
+
+    .g-recaptcha {
+      transform: scale(1);
+      -webkit-transform: scale(1);
+      transform-origin: 0 0;
+      -webkit-transform-origin: 0 0;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+
+    .ml-form-embedSubmitLoad:after {
+      content: " ";
+      display: block;
+      width: 11px;
+      height: 11px;
+      margin: 1px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      border-color: #ffffff #ffffff #ffffff transparent;
+      animation: ml-form-embedSubmitLoad 1.2s linear infinite;
+    }
+    
+    @keyframes ml-form-embedSubmitLoad {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer {
+      box-sizing: border-box;
+      display: table;
+      margin: 0 auto;
+      position: static;
+      width: 100% !important;
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer h4,
+    #mlb2-29284605.ml-form-embedContainer p,
+    #mlb2-29284605.ml-form-embedContainer span,
+    #mlb2-29284605.ml-form-embedContainer button {
+      text-transform: none !important;
+      letter-spacing: normal !important;
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper {
+      background-color: transparent !important;
+      border-width: 0px;
+      border-color: transparent;
+      border-radius: 4px;
+      border-style: solid;
+      box-sizing: border-box;
+      display: inline-block !important;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper.embedPopup,
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper.embedDefault { 
+      width: 100% !important; 
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper.embedForm { 
+      max-width: 100% !important; 
+      width: 100%; 
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody,
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper .ml-form-successBody {
+      padding: 0 !important;
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedContent h4,
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper .ml-form-successBody .ml-form-successContent h4 {
+      color: var(--fg) !important;
+      font-family: 'Montserrat Alternates', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      text-align: center;
+      word-break: break-word;
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedContent p,
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper .ml-form-successBody .ml-form-successContent p {
+      color: var(--fg) !important;
+      font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-fieldRow input {
+      background-color: rgba(255, 255, 255, 0.95) !important;
+      color: var(--fg) !important;
+      border-color: #cccccc;
+      border-radius: 4px !important;
+      border-style: solid !important;
+      border-width: 1px !important;
+      font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+      font-size: 14px !important;
+      height: auto;
+      line-height: 21px !important;
+      margin-bottom: 0;
+      margin-top: 0;
+      margin-left: 0;
+      margin-right: 0;
+      padding: 10px 10px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      max-width: 100% !important;
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button {
+      background-color: var(--fg) !important;
+      border: none !important;
+      border-radius: 7px !important;
+      box-shadow: none !important;
+      color: var(--bg) !important;
+      cursor: pointer;
+      font-family: 'Oxygen', sans-serif !important;
+      font-size: 18px !important;
+      font-weight: 700 !important;
+      line-height: 21px !important;
+      height: auto;
+      padding: 10px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    #mlb2-29284605.ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button:hover {
+      background-color: #333333 !important;
+    }
+    
+    .ml-error input {
+      border-color: red!important;
+    }
+
+    @media only screen and (max-width: 400px){
+      .ml-form-embedWrapper.embedDefault, .ml-form-embedWrapper.embedPopup { width: 100%!important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Topbar and sidebar from index page -->
+<header class="topbar">
+  <div class="logo flex items-center gap-3">
+    <img src="https://i.imgur.com/xvqBrl0.png" alt="Logo"/>
+    <div class="hidden md:block">
+      <div class="font-bold text-sm">Patrick Creations</div>
+      <div class="text-xs opacity-60">Another Patrick Creation</div>
+    </div>
+  </div>
+  <!-- Menu button is now right-aligned with simplified styling -->
+  <button id="hamburger" class="p-2 text-2xl">☰</button>
+</header>
+
+<aside id="sidebar" class="sidebar">
+  <div>
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-3">
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="logo" class="h-10"/>
+        <div>
+          <div class="font-bold text-lg">Patrick Creations</div>
+          <div class="text-xs opacity-60">Navigation</div>
+        </div>
+      </div>
+      <!-- Close button with simplified styling -->
+      <button id="sidebarClose">✕</button>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="movies_list.html">Productions</a>
+      <a href="thewall.html">The Wall</a>
+    </nav>
+    <div class="mt-6">
+      <div class="text-xs opacity-80 mb-1">Theme</div>
+      <div class="flex items-center gap-2">
+        <span class="text-sm opacity-80">Light</span>
+        <div id="themeSwitch" class="toggle"><div class="knob"></div></div>
+        <span class="text-sm opacity-80">Dark</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Contact page content -->
+<div class="edge-frame frame-1"></div>
+<div class="edge-frame frame-2"></div>
+<div class="edge-frame frame-3"></div>
+<div class="edge-frame frame-4"></div>
+
+<div class="container">
+    
+    
+    <div class="content">
+        <section class="newsletter">
+            <h2 class="newsletter-heading">Enter The Circle</h2>
+            <p class="newsletter-subheading">Identify with the vision. Stay connected.</p>
+            
+            <!-- Embedded MailerLite Form -->
+            <div id="mlb2-29284605" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-29284605">
+                <div class="ml-form-align-center">
+                    <div class="ml-form-embedWrapper embedForm">
+                        <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+                            <div class="ml-form-embedContent">
+                                <h4>JOIN THE CIRCLE</h4>
+                                <p>We Create. Identify with the Vision. Stay Connected.</p>
+                            </div>
+                            <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/1714498/forms/161980121732876188/subscribe" data-code="" method="post" target="_blank">
+                                <div class="ml-form-formContent">
+                                    <div class="ml-form-fieldRow ml-last-item">
+                                        <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
+                                            <input aria-label="email" aria-required="true" type="email" class="form-control" data-inputmask="" name="fields[email]" placeholder="Email" autocomplete="email">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ml-form-recaptcha ml-validate-required">
+                                    <div class="g-recaptcha" data-sitekey="6Lf1KHQUAAAAAFNKEX1hdSWCS3mRMv4FlFaNslaD"></div>
+                                </div>
+                                <input type="hidden" name="ml-submit" value="1">
+                                <div class="ml-form-embedSubmit">
+                                    <button type="submit" class="primary">TAP IN</button>
+                                    <button disabled="disabled" style="display: none;" type="button" class="loading">
+                                        <div class="ml-form-embedSubmitLoad"></div>
+                                        <span class="sr-only">Loading...</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="anticsrf" value="true">
+                            </form>
+                        </div>
+                        <div class="ml-form-successBody row-success" style="display: none">
+                            <div class="ml-form-successContent">
+                                <h4>WELCOME!</h4>
+                                <p>You are now a part of a community that believes in you :)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="contact-info">
+            <h2 class="info-heading">Connect With Us</h2>
+            
+            <div class="info-item">
+                <div class="info-title">Email</div>
+                <div class="info-content">
+                    <a href="mailto:emmanuelowochipatrick@gmail.com" class="email-link">emmanuelowochipatrick@gmail.com</a>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-title">Phone</div>
+                <div class="info-content">
+                    <a href="tel:+2348163696389">+234 816 369 6389</a>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-title">Social Media</div>
+                <div class="info-content">Follow us for daily updates</div>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/patrick.creations?igsh=ZmJyOTF2a20yM3Vj&utm_source=qr" target="_blank" rel="noopener noreferrer" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://pin.it/D9bxPuxwH" target="_blank" rel="noopener noreferrer" class="social-icon">
+                        <i class="fab fa-pinterest"></i>
+                    </a>
+                    <a href="https://youtube.com/@patrick.creations?si=8HTHMVKjILtTpynOa" target="_blank" rel="noopener noreferrer" class="social-icon">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://www.facebook.com/share/16dg9ryiUM/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <footer>
+        <p>© 2025 Patrick Creations. All rights reserved.</p>
+        <p>Immerse yourself in the world of cinema.</p>
+    </footer>
+</div>
+
+<script>
+  // Sidebar functionality
+  const hamburger = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarClose = document.getElementById('sidebarClose');
+  
+  hamburger.addEventListener('click', () => sidebar.classList.add('open'));
+  sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
+
+  // Theme toggle functionality
+  const themeSwitch = document.getElementById('themeSwitch');
+  const body = document.body;
+  
+  // Check for saved theme preference or respect OS preference
+  if (localStorage.getItem('theme') === 'dark' || 
+      (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme'))) {
+    body.classList.add('dark-theme');
+    themeSwitch.classList.add('on');
+  }
+  
+  themeSwitch.addEventListener('click', () => {
+    body.classList.toggle('dark-theme');
+    themeSwitch.classList.toggle('on');
+    
+    // Save the theme preference
+    if (body.classList.contains('dark-theme')) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script>
+
+<script>
+  function ml_webform_success_29284605() {
+    var $ = ml_jQuery || jQuery;
+    $('.ml-subscribe-form-29284605 .row-success').show();
+    $('.ml-subscribe-form-29284605 .row-form').hide();
+  }
+</script>
+
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script src="https://groot.mailerlite.com/js/w/webforms.min.js?v176e10baa5e7ed80d35ae235be3d5024" type="text/javascript"></script>
+<script>
+  fetch("https://assets.mailerlite.com/jsonp/1714498/forms/161980121732876188/takel")
+</script>
+
+</body>
+</html>

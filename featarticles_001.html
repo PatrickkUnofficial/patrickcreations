@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patrick Creations — From Ideas to Frames</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --bg: #fff; 
+            --fg: #0b0b0b; 
+            --muted: rgba(11,11,11,0.1); 
+            --accent-weak: rgba(11,11,11,0.06);
+            --label-opacity: 0.92;
+        }
+        .dark-theme { 
+            --bg: #0b0b0b; 
+            --fg: #fff; 
+            --muted: rgba(255,255,255,0.06); 
+            --accent-weak: rgba(255,255,255,0.03); 
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, sans-serif;
+            overflow-x: hidden;
+            background: var(--bg);
+            color: var(--fg);
+            transition: .35s;
+        }
+        
+        .topbar {
+            height: 72px;
+            position: fixed;
+            top: 0;
+            inset-inline: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            z-index: 60;
+            background: var(--bg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 380px;
+            height: 100vh;
+            background: var(--bg);
+            color: var(--fg);
+            box-shadow: -18px 0 40px rgba(0,0,0,0.08);
+            transition: right .45s;
+            z-index: 80;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .sidebar.open {
+            right: 0;
+        }
+        
+        .nav-links a {
+            display: block;
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin: 1rem 0;
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .toggle {
+            width: 54px;
+            height: 30px;
+            border-radius: 999px;
+            padding: 4px;
+            position: relative;
+            cursor: pointer;
+            background: var(--accent-weak);
+            display: inline-flex;
+            align-items: center;
+            transition: .25s;
+        }
+        
+        .toggle .knob {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--bg);
+            transition: .28s;
+            transform: translateX(0);
+        }
+        
+        .toggle.on {
+            background: var(--fg);
+        }
+        
+        .toggle.on .knob {
+            transform: translateX(24px);
+            background: var(--bg);
+        }
+        
+        /* Article specific styles */
+        .article-hero {
+            padding: 120px 1.5rem 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .article-title {
+            font-family: Cinzel, serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.125rem;
+            line-height: 1.7;
+        }
+        
+        .article-content h2 {
+            font-family: Cinzel, serif;
+            font-size: 1.75rem;
+            margin: 2.5rem 0 1rem;
+        }
+        
+        .article-content h3 {
+            font-family: Cinzel, serif;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--fg);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            opacity: 0.8;
+        }
+        
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+        
+        .article-content .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: -1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--fg);
+            color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 99;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        
+        footer {
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-top: 1px solid var(--accent-weak);
+            margin-top: 3rem;
+        }
+        
+        footer img {
+            height: 56px;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+        
+        .drop-cap:first-letter {
+            font-family: Cinzel, serif;
+            float: left;
+            font-size: 4.5rem;
+            line-height: 3.5rem;
+            padding-top: 0.5rem;
+            padding-right: 0.5rem;
+            padding-left: 0;
+        }
+    </style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="logo flex items-center gap-3">
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="Logo"/>
+        <div class="hidden md:block">
+            <div class="font-bold text-sm">Patrick Creations</div>
+            <div class="text-xs opacity-60">Another Patrick Creation</div>
+        </div>
+    </div>
+    <button id="hamburger" class="p-2 text-2xl">☰</button>
+</header>
+
+<aside id="sidebar" class="sidebar">
+    <div>
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <img src="https://i.imgur.com/xvqBrl0.png" alt="logo" class="h-10"/>
+                <div>
+                    <div class="font-bold text-lg">Patrick Creations</div>
+                    <div class="text-xs opacity-60">Navigation</div>
+                </div>
+            </div>
+            <button id="sidebarClose">✕</button>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="movies.html">Films</a>
+            <a href="about.html">About</a>
+            <a href="contactus.html">Contact</a>
+        </nav>
+        <div class="mt-6">
+            <div class="text-xs opacity-80 mb-1">Theme</div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm opacity-80">Light</span>
+                <div id="themeSwitch" class="toggle"><div class="knob"></div></div>
+                <span class="text-sm opacity-80">Dark</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<main>
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <h1 class="article-title">FROM IDEAS TO FRAMES</h1>
+        <div class="article-meta">
+            <span>Written by Emmanuel Patrick</span>
+            <span>Published on June 15, 2025</span>
+            <span>3 min read</span>
+        </div>
+    </section>
+
+    <!-- Article Content -->
+    <article class="article-content">
+        <p class="drop-cap">
+            I've always had a great love for storytelling. I believe I'm naturally creative and talented—a generational talent, if I dare say. However, I'm slowly beginning to understand that just because you're the first to stand doesn't mean you'll be the first to walk.
+        </p>
+        
+        <p>
+            I've met incredibly talented people in my life—people whose gifts bruise my ego every single day. It's a feeling I have a love-hate relationship with.
+        </p>
+        
+        <p>
+            Realizing I'm not as amazing as I once thought means I get to do so much more, become so much more—and that gives me joy. It comforts me to know I haven't yet reached my greatest self, because it would be quite depressing to say this is my final form. But that's not entirely a pleasant feeling either. It's like climbing a very tall ladder, believing that just beyond the clouds lies the end—only to realize the ladder keeps going, and you can't see where it stops. You just have faith that it will stop, and that when it does, you'll feel fulfilled.
+        </p>
+        
+        <blockquote>
+            "Let's take a moment to look at this ladder. What if it never stops, and you just keep climbing until your body gives out? What if the pursuit is endless—and you're only now realizing the possibility of that?"
+        </blockquote>
+        
+        <p>
+            You've already committed to the climb, too far up to go back down. What would you say to this person now questioning their choices? Are you this person?
+        </p>
+        
+        <p>
+            I won't claim to have the answer to this predicament, but I will say that I've chosen to love the process far more than whatever might be waiting for me at the end. Each step feels rewarding and fulfilling in its own way.
+        </p>
+        
+        <p>
+            I still believe I'm talented and hardworking—and I pat myself on the back for the good I've done. I'm good, but not the best. And when it comes to art, it feels like everyone is the best to someone. So, focus on being your best.
+        </p>
+        
+        <p>
+            The entire concept of making a film once felt otherworldly to me. I used to stare at huge blockbuster movies as a child, eyes wide with wonder. Even now, I still feel the same magic behind them. My taste in film has evolved over the years; my palette has become, what I believe, refined. But at the core, my appreciation for film—and for all other forms of art—remains the same, if not more elevated.
+        </p>
+    </article>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        ↑
+    </div>
+
+    <footer>
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="logo">
+        <p class="font-bold">Patrick Creations</p>
+        <p class="opacity-70">Contact: <a href="mailto:emmanuelowochiopatrick@gmail.com" class="underline">emmanuelowochiopatrick@gmail.com</a> | <a href="tel:+2348163696389" class="underline">+234 816 369 6389</a></p>
+        <p class="font-bold opacity-80">Another Patrick Creation</p>
+        <p class="opacity-60">Emmanuel Patrick, Muneer Abdulkadir, Chidalu Okeke</p>
+        <p class="opacity-40">&copy; 2025 Patrick Creations. All rights reserved.</p>
+    </footer>
+</main>
+
+<script>
+    // Back to top functionality
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+    
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Existing functionality from your code
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarClose = document.getElementById('sidebarClose');
+    hamburger.addEventListener('click', () => sidebar.classList.add('open'));
+    sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
+
+    // Theme toggle
+    const themeSwitch = document.getElementById('themeSwitch');
+    themeSwitch.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark-theme');
+        themeSwitch.classList.toggle('on');
+    });
+</script>
+
+</body>
+</html>

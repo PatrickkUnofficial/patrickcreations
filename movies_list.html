@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patrick Creations — Films</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --bg: #fff; 
+            --fg: #0b0b0b; 
+            --muted: rgba(11,11,11,0.1); 
+            --accent-weak: rgba(11,11,11,0.06);
+            --label-opacity: 0.92;
+        }
+        .dark-theme { 
+            --bg: #0b0b0b; 
+            --fg: #fff; 
+            --muted: rgba(255,255,255,0.06); 
+            --accent-weak: rgba(255,255,255,0.03); 
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, sans-serif;
+            overflow-x: hidden;
+            background: var(--bg);
+            color: var(--fg);
+            transition: .35s;
+        }
+        
+        /* Topbar */
+        .topbar {
+            height: 72px;
+            position: fixed;
+            top: 0;
+            inset-inline: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            z-index: 60;
+            background: var(--bg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 380px;
+            height: 100vh;
+            background: var(--bg);
+            color: var(--fg);
+            box-shadow: -18px 0 40px rgba(0,0,0,0.08);
+            transition: right .45s;
+            z-index: 80;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .sidebar.open {
+            right: 0;
+        }
+        
+        .nav-links a {
+            display: block;
+            font-weight: 800;
+            font-size: clamp(1.125rem, 4vw, 1.25rem);
+            margin: 1rem 0;
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        /* Toggle */
+        .toggle {
+            width: 54px;
+            height: 30px;
+            border-radius: 999px;
+            padding: 4px;
+            position: relative;
+            cursor: pointer;
+            background: var(--accent-weak);
+            display: inline-flex;
+            align-items: center;
+            transition: .25s;
+        }
+        
+        .toggle .knob {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--bg);
+            transition: .28s;
+            transform: translateX(0);
+        }
+        
+        .toggle.on {
+            background: var(--fg);
+        }
+        
+        .toggle.on .knob {
+            transform: translateX(24px);
+            background: var(--bg);
+        }
+        
+        /* Films Page Hero - More Dramatic */
+        .films-hero {
+            padding: 140px 1.5rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+        
+        .films-hero h1 {
+            font-family: Cinzel, serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 0.85;
+            margin-bottom: 1rem;
+            letter-spacing: -0.03em;
+            font-weight: 400;
+        }
+        
+        .films-subtitle {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            opacity: 0.7;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        
+        /* Film Showcase - Elegant Linear Layout */
+        .film-showcase {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem 6rem;
+        }
+        
+        /* Film Item - Elegant Side-by-Side Design */
+        .film-item {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 6rem;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .film-item:nth-child(1) { animation-delay: 0.2s; }
+        .film-item:nth-child(2) { 
+            flex-direction: row-reverse;
+            animation-delay: 0.4s; 
+        }
+        .film-item:nth-child(3) { animation-delay: 0.6s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .film-image-container {
+            flex: 1;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            transition: all 0.5s ease;
+            height: 500px;
+        }
+        
+        .film-item:hover .film-image-container {
+            transform: translateY(-10px);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.25);
+        }
+        
+        .film-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .film-item:hover .film-image {
+            transform: scale(1.05);
+        }
+        
+        .film-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 10;
+            backdrop-filter: blur(4px);
+        }
+        
+        .film-content {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        
+        .film-title {
+            font-family: Cinzel, serif;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+        
+        .film-meta {
+            font-size: 0.95rem;
+            opacity: 0.7;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .film-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .film-description {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .film-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        
+        .film-tag {
+            padding: 0.4rem 1rem;
+            background: var(--muted);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .film-tag:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+        
+        .film-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .film-link {
+            padding: 0.75rem 1.75rem;
+            background: var(--fg);
+            color: var(--bg);
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .film-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .film-link.secondary {
+            background: transparent;
+            border: 2px solid var(--fg);
+            color: var(--fg);
+        }
+        
+        .film-link.secondary:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+        
+        /* Coming Soon Banner */
+        .coming-soon-banner {
+            text-align: center;
+            padding: 4rem 1.5rem;
+            background: var(--accent-weak);
+            margin: 4rem auto;
+            border-radius: 20px;
+            max-width: 800px;
+        }
+        
+        .coming-soon-banner h2 {
+            font-family: Cinzel, serif;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .coming-soon-banner p {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-top: 1px solid var(--accent-weak);
+            margin-top: 3rem;
+        }
+        
+        footer img {
+            height: 56px;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+        
+        /* Responsive */
+        @media (max-width: 900px) {
+            .film-item {
+                flex-direction: column !important;
+                gap: 2rem;
+                margin-bottom: 4rem;
+            }
+            
+            .film-image-container {
+                height: 400px;
+                width: 100%;
+            }
+            
+            .film-content {
+                padding: 0;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .films-hero {
+                padding: 120px 1rem 3rem;
+            }
+            
+            .film-showcase {
+                padding: 0 1rem 4rem;
+            }
+            
+            .film-image-container {
+                height: 300px;
+            }
+            
+            .film-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .film-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .film-link {
+                text-align: center;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="logo flex items-center gap-3">
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="Logo"/>
+        <div class="hidden md:block">
+            <div class="font-bold text-sm">Patrick Creations</div>
+            <div class="text-xs opacity-60">Another Patrick Creation</div>
+        </div>
+    </div>
+    <button id="hamburger" class="p-2 text-2xl" aria-label="Open menu">☰</button>
+</header>
+
+<aside id="sidebar" class="sidebar">
+    <div>
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <img src="https://i.imgur.com/xvqBrl0.png" alt="logo" class="h-10"/>
+                <div>
+                    <div class="font-bold text-lg">Patrick Creations</div>
+                    <div class="text-xs opacity-60">Navigation</div>
+                </div>
+            </div>
+            <button id="sidebarClose" aria-label="Close menu">✕</button>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contactus.html">Contact</a>
+            <a href="thewall.html">The Wall</a>
+        </nav>
+        <div class="mt-6">
+            <div class="text-xs opacity-80 mb-1">Theme</div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm opacity-80">Light</span>
+                <div id="themeSwitch" class="toggle"><div class="knob"></div></div>
+                <span class="text-sm opacity-80">Dark</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<main>
+    <!-- Films Hero -->
+    <section class="films-hero">
+        <h1>Our Films</h1>
+        <p class="films-subtitle">
+            Distinct stories, one unwavering commitment to cinematic excellence. Each film represents a chapter in our creative journey.
+        </p>
+    </section>
+
+    <!-- Film Showcase - Elegant Linear Layout -->
+    <div class="film-showcase">
+        
+        <!-- The Brilliant Boy -->
+        <article class="film-item">
+            <div class="film-image-container">
+                <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_800,c_limit/v1759572607/TBB.00_03_09_01.Still005_ksauyl.jpg" 
+                     alt="The Brilliant Boy" 
+                     class="film-image">
+                <div class="film-status">Available</div>
+            </div>
+            
+            <div class="film-content">
+                <h2 class="film-title">The Brilliant Boy</h2>
+                
+                <div class="film-meta">
+                    <span class="film-meta-item">2025 • 13m 27s</span>
+                    <span class="film-meta-item">Drama</span>
+                    <span class="film-meta-item">Short Film</span>
+                </div>
+
+                
+                <p class="film-description">
+                    In a world that fails to see beyond his autism, a brilliant young boy's untimely death robs the world of his extraordinary genius, leaving his potential forever unrealized. Nathaniel sees patterns and solutions invisible to others, but his unique way of thinking is misunderstood by those around him.
+                </p>
+                
+                <div class="film-actions">
+                    <a href="tbb.html" class="film-link">
+                        <span>View Film</span>
+                        →
+                    </a>
+                    <a href="https://youtu.be/v_HiNI7AY9A" target="_blank" class="film-link secondary">
+                        <span>Watch Trailer</span>
+                        ▶
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <!-- ALONE -->
+        <article class="film-item">
+            <div class="film-image-container">
+                <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_800,c_limit/ALONE_.00_01_02_06.Still002_duf47c.png" 
+                     alt="ALONE" 
+                     class="film-image">
+                <div class="film-status">Available</div>
+            </div>
+            
+            <div class="film-content">
+                <h2 class="film-title">ALONE</h2>
+                
+                <div class="film-meta">
+                    <span class="film-meta-item">2025 • 4m 40s</span>
+                    <span class="film-meta-item">Drama</span>
+                    <span class="film-meta-item">Short Film</span>
+                </div>
+                
+                <p class="film-description">
+                    Alone is the story of not a single person, but all of us in some way. It is about the solitude of every person and how even in a room full of people, one can feel so lonely. Beyond that, it also touches on themes of mental wellness and the need to care about not only our own mental health, but also that of the people around us.
+                </p>
+                
+                <div class="film-actions">
+                    <a href="movies_alone.html" class="film-link">
+                        <span>View Film</span>
+                        →
+                    </a>
+                    <a href="https://youtu.be/hrrE6qM2vHo" target="_blank" class="film-link secondary">
+                        <span>Watch on YouTube</span>
+                        ↗
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <!-- Oil&Water -->
+        <article class="film-item">
+            <div class="film-image-container">
+                <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_800,c_limit/v1759575559/IMG_1538_lg6o34.jpg" 
+                     alt="Oil&Water" 
+                     class="film-image">
+                <div class="film-status">Coming Soon</div>
+            </div>
+            
+            <div class="film-content">
+                <h2 class="film-title">Oil&Water</h2>
+                
+                <div class="film-meta">
+                    <span class="film-meta-item">2026 • Duration TBA</span>
+                    <span class="film-meta-item">Drama</span>
+                    <span class="film-meta-item">Short Film</span>
+                </div>
+                
+                
+                <p class="film-description">
+                    Two elements that don't mix, two lives that weren't meant to intersect. A story about boundaries, chemistry, and what happens when opposites collide in a city that forces them together. Currently in production, this film explores the tension between connection and separation, belonging and isolation.
+                </p>
+                
+                <div class="film-actions">
+                    <a href="#" class="film-link" style="opacity: 0.7; pointer-events: none;">
+                        <span>Coming Soon</span>
+                    </a>
+                    <a href="lookbook.html" class="film-link secondary">
+                        <span>Behind the Scenes</span>
+                        📸
+                    </a>
+                </div>
+            </div>
+        </article>
+
+    </div>
+
+    <!-- Coming Soon Banner -->
+    <section class="coming-soon-banner">
+        <h2>What's Next</h2>
+        <p>
+            We're constantly developing new stories and exploring fresh cinematic territory. 
+            Follow our journey for updates on upcoming projects, behind-the-scenes content, 
+            and festival announcements.
+        </p>
+        <a href="thewall.html" class="film-link" style="background: var(--fg); color: var(--bg);">
+            <span>Explore Our Lookbook</span>
+            →
+        </a>
+    </section>
+
+    <footer>
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="logo">
+        <p class="font-bold">Patrick Creations</p>
+        <p class="opacity-70">Contact: <a href="mailto:emmanuelowochiopatrick@gmail.com" class="underline">emmanuelowochiopatrick@gmail.com</a> | <a href="tel:+2348163696389" class="underline">+234 816 369 6389</a></p>
+        <p class="font-bold opacity-80">Another Patrick Creation</p>
+        <p class="opacity-60">Emmanuel Patrick, Muneer Abdulkadir, Chidalu Okeke</p>
+        <p class="opacity-40">&copy; 2025 Patrick Creations. All rights reserved.</p>
+    </footer>
+</main>
+
+<script>
+    // Existing functionality from your code
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarClose = document.getElementById('sidebarClose');
+    
+    hamburger.addEventListener('click', () => sidebar.classList.add('open'));
+    sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
+    
+    // Close sidebar when clicking outside
+    document.addEventListener('click', (e) => {
+        if (sidebar.classList.contains('open') && 
+            !sidebar.contains(e.target) && 
+            e.target !== hamburger) {
+            sidebar.classList.remove('open');
+        }
+    });
+    
+    // Theme toggle
+    const themeSwitch = document.getElementById('themeSwitch');
+    themeSwitch.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark-theme');
+        themeSwitch.classList.toggle('on');
+        
+        // Save theme preference
+        const isDark = document.documentElement.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+    
+    // Check for saved theme preference
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark-theme');
+        themeSwitch.classList.add('on');
+    }
+    
+    // Add scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+            }
+        });
+    }, observerOptions);
+    
+    // Observe film items
+    document.querySelectorAll('.film-item').forEach(item => {
+        observer.observe(item);
+    });
+    
+    // Add hover sound effect for film links (optional)
+    const filmLinks = document.querySelectorAll('.film-link');
+    filmLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            link.style.transform = 'translateY(-2px)';
+        });
+        
+        link.addEventListener('mouseleave', () => {
+            link.style.transform = 'translateY(0)';
+        });
+    });
+</script>
+</body>
+</html>

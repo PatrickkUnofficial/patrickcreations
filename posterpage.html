@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poster Giveaway — Patrick Creations</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --bg: #fff; 
+            --fg: #0b0b0b; 
+            --muted: rgba(11,11,11,0.1); 
+            --accent-weak: rgba(11,11,11,0.06);
+            --label-opacity: 0.92;
+        }
+        .dark-theme { 
+            --bg: #0b0b0b; 
+            --fg: #fff; 
+            --muted: rgba(255,255,255,0.06); 
+            --accent-weak: rgba(255,255,255,0.03); 
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, sans-serif;
+            overflow-x: hidden;
+            background: var(--bg);
+            color: var(--fg);
+            transition: .35s;
+        }
+        
+        .topbar {
+            height: 72px;
+            position: fixed;
+            top: 0;
+            inset-inline: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            z-index: 60;
+            background: var(--bg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 380px;
+            height: 100vh;
+            background: var(--bg);
+            color: var(--fg);
+            box-shadow: -18px 0 40px rgba(0,0,0,0.08);
+            transition: right .45s;
+            z-index: 80;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .sidebar.open {
+            right: 0;
+        }
+        
+        .nav-links a {
+            display: block;
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin: 1rem 0;
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .toggle {
+            width: 54px;
+            height: 30px;
+            border-radius: 999px;
+            padding: 4px;
+            position: relative;
+            cursor: pointer;
+            background: var(--accent-weak);
+            display: inline-flex;
+            align-items: center;
+            transition: .25s;
+        }
+        
+        .toggle .knob {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--bg);
+            transition: .28s;
+            transform: translateX(0);
+        }
+        
+        .toggle.on {
+            background: var(--fg);
+        }
+        
+        .toggle.on .knob {
+            transform: translateX(24px);
+            background: var(--bg);
+        }
+        
+        /* Contest specific styles */
+        .contest-hero {
+            height: 70vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 72px;
+            background: linear-gradient(135deg, rgba(11,11,11,0.03) 0%, rgba(11,11,11,0) 100%);
+        }
+        
+        .contest-title {
+            font-family: Cinzel, serif;
+            font-size: clamp(36px, 8vw, 96px);
+            text-align: center;
+            margin-bottom: 1rem;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+        }
+        
+        .contest-subtitle {
+            font-size: clamp(16px, 2vw, 22px);
+            text-align: center;
+            opacity: 0.7;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+        }
+        
+        .prize-amount {
+            font-family: Cinzel, serif;
+            font-size: clamp(42px, 6vw, 72px);
+            color: #C48A2C;
+            text-align: center;
+            margin: 2rem 0;
+            font-weight: 600;
+        }
+        
+        .step-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .step-card {
+            background: var(--bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--accent-weak);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--fg);
+            color: var(--bg);
+            font-family: Cinzel, serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-title {
+            font-family: Cinzel, serif;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--fg);
+        }
+        
+        .step-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-tag {
+            padding: 0.5rem 1.25rem;
+            border-radius: 999px;
+            background: var(--accent-weak);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .social-tag i {
+            font-size: 1.2rem;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, rgba(11,11,11,0.03) 0%, rgba(11,11,11,0) 100%);
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--fg);
+            color: var(--bg);
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin-top: 1.5rem;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .rules-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .rules-title {
+            font-family: Cinzel, serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .rules-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .rules-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--accent-weak);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .rules-list li:before {
+            content: "•";
+            color: #C48A2C;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        
+        footer {
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-top: 1px solid var(--accent-weak);
+            margin-top: 3rem;
+        }
+        
+        footer img {
+            height: 56px;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .step-card {
+                padding: 1.5rem;
+            }
+            
+            .contest-hero {
+                height: 60vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="logo flex items-center gap-3">
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="Logo"/>
+        <div class="hidden md:block">
+            <div class="font-bold text-sm">Patrick Creations</div>
+            <div class="text-xs opacity-60">Another Patrick Creation</div>
+        </div>
+    </div>
+    <button id="hamburger" class="p-2 text-2xl">☰</button>
+</header>
+
+<aside id="sidebar" class="sidebar">
+    <div>
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <img src="https://i.imgur.com/xvqBrl0.png" alt="logo" class="h-10"/>
+                <div>
+                    <div class="font-bold text-lg">Patrick Creations</div>
+                    <div class="text-xs opacity-60">Navigation</div>
+                </div>
+            </div>
+            <button id="sidebarClose">✕</button>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="movies_list.html">Productions</a>
+            <a href="about.html">About</a>
+            <a href="contactus.html">Contact</a>
+        </nav>
+        <div class="mt-6">
+            <div class="text-xs opacity-80 mb-1">Theme</div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm opacity-80">Light</span>
+                <div id="themeSwitch" class="toggle"><div class="knob"></div></div>
+                <span class="text-sm opacity-80">Dark</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<main>
+    <!-- Contest Hero -->
+    <section class="contest-hero">
+        <div class="text-center">
+            <h1 class="contest-title">POSTER GIVEAWAY</h1>
+            <p class="contest-subtitle">Showcase your creativity and design skills for a chance to get</p>
+            <div class="prize-amount">₦40,000</div>
+            <p class="contest-subtitle">Four finalists will be selected based on social media engagement</p>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="step-container">
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <h2 class="step-title">Create Your Poster Design</h2>
+            <p class="step-description">
+                Design an original poster that showcases your creative vision. Your design should be visually compelling and reflect your unique artistic style. There are no specific theme restrictions, so let your imagination run wild!
+            </p>
+        </div>
+        
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <h2 class="step-title">Share on Social Media</h2>
+            <p class="step-description">
+                Post your design on any social media platform where Patrick Creations has a presence. Make sure to tag us in your post or invite us as a collaborator so we can see your entry.
+            </p>
+            <div class="social-tags">
+                <div class="social-tag">
+                    <i>📷</i> Instagram
+                </div>
+                <div class="social-tag">
+                    <i>🐦</i> Twitter
+                </div>
+                <div class="social-tag">
+                    <i>📘</i> Facebook
+                </div>
+            </div>
+        </div>
+        
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <h2 class="step-title">Get the Giveaway!</h2>
+            <p class="step-description">
+                The four posts with the most likes will be selected as finalists. From these four, our panel of judges at Patrick Creations will choose the ultimate winner who will receive the ₦40,000 cash prize.
+            </p>
+            <p class="step-description">
+                The winner will also have their work featured across Patrick Creations' social media channels and website.
+            </p>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2 class="contest-title" style="font-size: clamp(28px, 5vw, 48px);">Ready to Showcase Your Talent?</h2>
+        <p class="contest-subtitle" style="max-width: 600px;">Join the giveaway today and stand a chance to win ₦40,000</p>
+    </section>
+
+    <!-- Rules Section -->
+    <section class="rules-section">
+        <h2 class="rules-title">Giveaway Rules & Guidelines</h2>
+        <ul class="rules-list">
+            <li>Giveaway is open to all creatives and designers</li>
+            <li>Each participant can submit as many designs as the like!</li>
+            <li>Designs must be original work created by the participant</li>
+            <li>Post must tag @PatrickCreations</li>
+            <li>Your account must be following Patrick Creations on the platform you post to</li>
+            <li>Contest runs from [Start Date] to [End Date]</li>
+            <li>The four finalists will be announced on [Finalist Announcement Date]</li>
+            <li>By entering, you grant Patrick Creations permission to share your work on our platforms</li>
+            <li>Employees of Patrick Creations and their immediate family members are not eligible to participate</li>
+        </ul>
+    </section>
+
+    <footer>
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="logo">
+        <p class="font-bold">Patrick Creations</p>
+        <p class="opacity-70">Contact: <a href="mailto:emmanuelowochiopatrick@gmail.com" class="underline">emmanuelowochiopatrick@gmail.com</a> | <a href="tel:+2348163696389" class="underline">+234 816 369 6389</a></p>
+        <p class="font-bold opacity-80">Another Patrick Creation</p>
+        <p class="opacity-40">&copy; 2025 Patrick Creations. All rights reserved.</p>
+    </footer>
+</main>
+
+<script>
+    // Existing functionality from your code
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarClose = document.getElementById('sidebarClose');
+    hamburger.addEventListener('click', () => sidebar.classList.add('open'));
+    sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
+
+    // Theme toggle
+    const themeSwitch = document.getElementById('themeSwitch');
+    themeSwitch.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark-theme');
+        themeSwitch.classList.toggle('on');
+    });
+</script>
+
+</body>
+</html>

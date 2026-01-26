@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patrick Creations — Untapped Potential</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --bg: #fff; 
+            --fg: #0b0b0b; 
+            --muted: rgba(11,11,11,0.1); 
+            --accent-weak: rgba(11,11,11,0.06);
+            --label-opacity: 0.92;
+        }
+        .dark-theme { 
+            --bg: #0b0b0b; 
+            --fg: #fff; 
+            --muted: rgba(255,255,255,0.06); 
+            --accent-weak: rgba(255,255,255,0.03); 
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, sans-serif;
+            overflow-x: hidden;
+            background: var(--bg);
+            color: var(--fg);
+            transition: .35s;
+        }
+        
+        .topbar {
+            height: 72px;
+            position: fixed;
+            top: 0;
+            inset-inline: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            z-index: 60;
+            background: var(--bg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 380px;
+            height: 100vh;
+            background: var(--bg);
+            color: var(--fg);
+            box-shadow: -18px 0 40px rgba(0,0,0,0.08);
+            transition: right .45s;
+            z-index: 80;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .sidebar.open {
+            right: 0;
+        }
+        
+        .nav-links a {
+            display: block;
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin: 1rem 0;
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .toggle {
+            width: 54px;
+            height: 30px;
+            border-radius: 999px;
+            padding: 4px;
+            position: relative;
+            cursor: pointer;
+            background: var(--accent-weak);
+            display: inline-flex;
+            align-items: center;
+            transition: .25s;
+        }
+        
+        .toggle .knob {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--bg);
+            transition: .28s;
+            transform: translateX(0);
+        }
+        
+        .toggle.on {
+            background: var(--fg);
+        }
+        
+        .toggle.on .knob {
+            transform: translateX(24px);
+            background: var(--bg);
+        }
+        
+        /* Article specific styles */
+        .article-hero {
+            padding: 120px 1.5rem 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .article-title {
+            font-family: Cinzel, serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .article-subtitle {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.125rem;
+            line-height: 1.7;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--fg);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            opacity: 0.8;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        /* Special styles for this article */
+        .fade-in-paragraph {
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+        
+        .fade-in-paragraph:hover {
+            opacity: 1;
+        }
+        
+        .observation-box {
+            background: var(--accent-weak);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .cocoa-brown {
+            color: #8B4513;
+            font-weight: bold;
+        }
+        
+        .time-passage {
+            font-style: italic;
+            text-align: center;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-top: 1px solid var(--muted);
+            border-bottom: 1px solid var(--muted);
+            opacity: 0.8;
+        }
+        
+        .conclusion-paragraph {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--accent-weak) 0%, transparent 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 3rem 0;
+        }
+        
+        .drop-cap:first-letter {
+            font-family: Cinzel, serif;
+            float: left;
+            font-size: 4.5rem;
+            line-height: 3.5rem;
+            padding-top: 0.5rem;
+            padding-right: 0.5rem;
+            padding-left: 0;
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--fg);
+            color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 99;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        
+        footer {
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-top: 1px solid var(--accent-weak);
+            margin-top: 3rem;
+        }
+        
+        footer img {
+            height: 56px;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="logo flex items-center gap-3">
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="Logo"/>
+        <div class="hidden md:block">
+            <div class="font-bold text-sm">Patrick Creations</div>
+            <div class="text-xs opacity-60">Another Patrick Creation</div>
+        </div>
+    </div>
+    <button id="hamburger" class="p-2 text-2xl">☰</button>
+</header>
+
+<aside id="sidebar" class="sidebar">
+    <div>
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <img src="https://i.imgur.com/xvqBrl0.png" alt="logo" class="h-10"/>
+                <div>
+                    <div class="font-bold text-lg">Patrick Creations</div>
+                    <div class="text-xs opacity-60">Navigation</div>
+                </div>
+            </div>
+            <button id="sidebarClose">✕</button>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="movies_tbb.html">Productions</a>
+            <a href="about.html">About</a>
+            <a href="contactus.html">Contact</a>
+        </nav>
+        <div class="mt-6">
+            <div class="text-xs opacity-80 mb-1">Theme</div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm opacity-80">Light</span>
+                <div id="themeSwitch" class="toggle"><div class="knob"></div></div>
+                <span class="text-sm opacity-80">Dark</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<main>
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <h1 class="article-title">UNTAPPED POTENTIAL</h1>
+        <div class="article-subtitle">
+            A story about cocoa trees, waiting, and the tragedy of preparation without action
+        </div>
+        <div class="article-meta">
+            <span>Written by Emmanuel Patrick</span>
+            <span>Published on December 27, 2024</span>
+            <span>5 min read</span>
+        </div>
+    </section>
+
+    <!-- Article Content -->
+    <article class="article-content">
+        <p class="drop-cap">
+            I used to live close to a very large plantation. It was a <span class="cocoa-brown">cocoa plantation</span>. The farmer told me he was the only one in the region who grew cocoa, explaining that it was very expensive to cultivate because it required substantial investment and cocoa takes a long time to mature before it can be harvested.
+        </p>
+        
+        <p class="fade-in-paragraph">
+            I had watched the cocoa grow from seedlings. I remembered when the farmer had just begun planting them, and now they stood as huge, towering trees. I felt proud just observing their growth, and I wondered how much prouder the farmer must have felt.
+        </p>
+        
+        <div class="observation-box">
+            <p>
+                He had everything he needed to become the biggest cocoa exporter in the region. He was positioned to make millions in just a few years. The potential was undeniable—rows upon rows of valuable cocoa trees, each one a future source of wealth.
+            </p>
+        </div>
+        
+        <p>
+            I waited. I waited for him patiently. I watched for signs of his success—for him to change his clothes, renovate his house, buy a fine watch, or drive a new car. But he never did. I waited and waited, season after season, but nothing ever happened.
+        </p>
+        
+        <div class="time-passage">
+            Seasons turned to years, and the trees grew taller and stronger, yet the farmer remained exactly as he was.
+        </div>
+        
+        <p>
+            I wondered what was wrong, so one day I walked up to his house and knocked on his door with a pie in hand. He opened the door and invited me in. We shared the pie, had a good laugh, and talked all day until the setting sun reminded me it was time to return home.
+        </p>
+        
+        <p>
+            As I prepared to leave, I decided I should ask him while I still had the chance. So I did. "With all these cocoa trees," I asked, "why haven't you become the wealthy exporter everyone expects you to be?"
+        </p>
+        
+        <blockquote>
+            He looked at me thoughtfully, then simply said, "I'm not ready yet." That was all. He had worked all those years, nurtured the trees through their growth, but he simply wasn't ready.
+        </blockquote>
+        
+        <p>
+            I accepted that as my answer and left. So there the great money-makers stood—majestic cocoa trees, owned by this man who saw them not as opportunity, but as something he wasn't yet prepared to embrace.
+        </p>
+        
+        <div class="time-passage">
+            The years continued to pass, and the man began to age. He grew older and older, his hair turning gray, his steps becoming slower.
+        </div>
+        
+        <div class="conclusion-paragraph">
+            <p>
+                He never did make his fortune from those trees. The potential remained exactly that—potential. Untapped, unrealized, waiting for a readiness that never came. He was simply never ready, and so the trees stood as monuments to what could have been.
+            </p>
+        </div>
+    
+    </article>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        ↑
+    </div>
+
+    <footer>
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="logo">
+        <p class="font-bold">Patrick Creations</p>
+        <p class="opacity-70">Contact: <a href="mailto:emmanuelowochiopatrick@gmail.com" class="underline">emmanuelowochiopatrick@gmail.com</a> | <a href="tel:+2348163696389" class="underline">+234 816 369 6389</a></p>
+        <p class="font-bold opacity-80">Another Patrick Creation</p>
+        <p class="opacity-60">Emmanuel Patrick, Muneer Abdulkadir, Chidalu Okeke</p>
+        <p class="opacity-40">&copy; 2025 Patrick Creations. All rights reserved.</p>
+    </footer>
+</main>
+
+<script>
+    // Back to top functionality
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+    
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Existing functionality from your code
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarClose = document.getElementById('sidebarClose');
+    hamburger.addEventListener('click', () => sidebar.classList.add('open'));
+    sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
+
+    // Theme toggle
+    const themeSwitch = document.getElementById('themeSwitch');
+    themeSwitch.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark-theme');
+        themeSwitch.classList.toggle('on');
+    });
+    
+    // Add paragraph hover effects
+    document.querySelectorAll('.fade-in-paragraph').forEach(paragraph => {
+        paragraph.addEventListener('mouseenter', () => {
+            paragraph.style.opacity = '1';
+        });
+        paragraph.addEventListener('mouseleave', () => {
+            paragraph.style.opacity = '0.9';
+        });
+    });
+</script>
+
+</body>
+</html>
