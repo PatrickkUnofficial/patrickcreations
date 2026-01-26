@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en" class="antialiased">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Patrick Creations — The Brilliant Boy</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind (utility support) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Swiper for hero & cast carousel -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#fff; --fg:#0b0b0b; --muted:rgba(11,11,11,0.08); --accent-weak:rgba(11,11,11,0.04);
+      --glass: rgba(255,255,255,0.6);
+      --label-opacity:0.92;
+    }
+    .dark-theme { --bg:#0b0b0b; --fg:#fff; --muted:rgba(255,255,255,0.06); --accent-weak:rgba(255,255,255,0.03); --glass: rgba(0,0,0,0.5); }
+
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:var(--fg);background:var(--bg);transition:background .35s,color .35s;overflow-x:hidden;}
+
+    /* Topbar */
+    .topbar{height:72px;position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;z-index:60;background:transparent;backdrop-filter:blur(6px);}
+    .logo img{height:40px;width:auto;display:block;}
+
+    /* Sidebar */
+    .sidebar{position:fixed;top:0;right:-100%;width:100%;max-width:380px;height:100vh;background:var(--bg);color:var(--fg);box-shadow:-18px 0 40px rgba(0,0,0,0.08);transition:right .45s;z-index:80;padding:3rem 2rem;display:flex;flex-direction:column;justify-content:space-between;}
+    .sidebar.open{right:0;}
+    .nav-links a{display:block;font-weight:800;font-size:clamp(1rem, 3.5vw, 1.125rem);margin:1rem 0;color:inherit;text-decoration:none}
+
+    /* Toggle */
+    .toggle{width:54px;height:30px;border-radius:999px;padding:4px;position:relative;cursor:pointer;background:var(--accent-weak);display:inline-flex;align-items:center;transition:.25s;}
+    .toggle .knob{width:22px;height:22px;border-radius:50%;background:var(--bg);transition:.28s;transform:translateX(0);}
+    .toggle.on{background:var(--fg);}
+    .toggle.on .knob{transform:translateX(24px);background:var(--bg);}
+
+    main{padding-top:72px;}
+
+    /* Hero / Swiper */
+    .hero {height:68vh;position:relative;display:flex;align-items:flex-end;padding:2.5rem;overflow:hidden;}
+    .hero .slide-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(30%) contrast(95%) brightness(.9);transform:scale(1.03);transition:transform .9s,filter .6s;}
+    .hero .slide-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.35));pointer-events:none;}
+    .hero .hero-content{position:relative;z-index:10;max-width:1200px;color:var(--bg);padding:2rem;display:flex;flex-direction:column;gap:.75rem;}
+    .hero h1{font-family:Cinzel,serif;font-weight:400;font-size:clamp(28px,5vw,64px);line-height:0.92;margin:0;color:var(--bg);text-shadow:0 8px 30px rgba(0,0,0,0.45);}
+    .meta{font-size:0.95rem;opacity:.9;margin-top:.25rem;color:var(--bg);}
+
+    .hero-cta{display:flex;gap:0.75rem;margin-top:1rem;}
+    .btn {display:inline-flex;align-items:center;gap:.6rem;padding:.6rem 1rem;border-radius:999px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:var(--bg);cursor:pointer;font-weight:600;backdrop-filter:blur(6px);transition:transform .18s,opacity .18s;}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.18);opacity:.95}
+    .btn:active{transform:translateY(1px);}
+
+    /* Horizontal stills */
+    .stills-wrap{padding:2rem 1rem;max-width:1400px;margin:0 auto;}
+    .horizontal-scroll{display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem;scrollbar-width:none;}
+    .horizontal-scroll::-webkit-scrollbar{display:none;}
+    .still-card{min-width:320px;height:190px;border-radius:12px;overflow:hidden;position:relative;background:var(--muted);cursor:pointer;flex:0 0 auto;transition:transform .45s,box-shadow .45s;}
+    .still-card img{width:100%;height:100%;object-fit:cover;transform:scale(1.06);filter:grayscale(60%) brightness(.85);transition:transform .6s,filter .45s;}
+    .still-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.14);}
+    .still-card:hover img{transform:scale(1.12);filter:grayscale(0%) brightness(1);}
+
+    .still-label{position:absolute;left:1.2rem;bottom:1.1rem;color:var(--bg);font-family:Cinzel,serif;font-size:.95rem;text-shadow:0 10px 20px rgba(0,0,0,0.45)}
+
+    /* Info section */
+    .section{padding:4rem 1rem;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 380px;gap:2rem;align-items:start;}
+    @media (max-width: 900px){ .section{grid-template-columns:1fr;}}
+    .synopsis{font-size:1rem;line-height:1.6;color:var(--fg);background:transparent}
+    .synopsis .excerpt{max-height:6.5rem;overflow:hidden;transition:max-height .4s ease;}
+    .synopsis .excerpt.open{max-height:400px;}
+    .expand-btn{background:none;border:none;color:var(--fg);cursor:pointer;font-weight:700;padding:0;margin-left:.5rem}
+
+    .credits-card{background:var(--muted);padding:1.25rem;border-radius:10px;border:1px solid var(--accent-weak);position:sticky;top:92px;}
+    .credits-card h4{font-family:Cinzel,serif;margin:0 0 .5rem;font-weight:400}
+    .credits-line{margin:0.25rem 0;font-size:.95rem;opacity:.95}
+
+    /* Footer */
+    footer{padding:3rem 1rem;text-align:center;border-top:1px solid var(--accent-weak);margin-top:3rem}
+    footer img{height:56px;margin:0 auto 1rem;display:block;}
+
+    /* Utility */
+    .muted-small{opacity:.7;font-size:.92rem}
+    button:focus{outline:2px solid rgba(11,11,11,0.12);outline-offset:2px}
+    
+    /* Trailer Modal Styles */
+    .trailer-modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.9);
+      z-index: 120;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    
+    .trailer-modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .trailer-content {
+      max-width: 900px;
+      width: 90%;
+      background: transparent;
+      position: relative;
+    }
+    
+    .trailer-close {
+      position: absolute;
+      top: -3.5rem;
+      right: 0;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 10;
+    }
+    
+    .trailer-video {
+      padding-top: 56.25%;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .trailer-video iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    
+    .trailer-link {
+      display: block;
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      margin-top: 1rem;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background .2s;
+    }
+    
+    .trailer-link:hover {
+      background: rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="logo flex items-center gap-3">
+      <a href="index.html" class="flex items-center gap-3" aria-label="Patrick Creations home">
+        <img src="https://i.imgur.com/xvqBrl0.png" alt="logo"/>
+        <div class="hidden md:block">
+          <div class="font-bold text-sm" style="color:var(--fg)">Patrick Creations</div>
+          <div class="text-xs opacity-60" style="color:var(--fg)">Another Patrick Creation</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button id="hamburger" class="p-2 text-2xl" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar" aria-hidden="true">
+    <div>
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <img src="https://i.imgur.com/xvqBrl0.png" alt="logo" class="h-10"/>
+          <div>
+            <div class="font-bold text-lg">Patrick Creations</div>
+            <div class="text-xs opacity-60">Navigation</div>
+          </div>
+        </div>
+        <button id="sidebarClose" aria-label="Close menu">✕</button>
+      </div>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="movies_list.html">Productions</a>
+        <a href="about.html">About</a>
+        <a href="contactus.html">Contact</a>
+      </nav>
+
+      <div class="mt-6">
+        <div class="text-xs opacity-80 mb-1">Theme</div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm opacity-80">Light</span>
+          <div id="themeSwitch" class="toggle" role="button" aria-pressed="false" tabindex="0"><div class="knob"></div></div>
+          <span class="text-sm opacity-80">Dark</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- HERO (Single image) -->
+    <section class="hero">
+      <img class="slide-img" src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_1200,c_limit/ALONE_.00_01_02_06.Still002_duf47c.png" alt="Hero still">
+      <div class="slide-overlay"></div>
+
+      <div class="hero-content">
+        <h1>ALONE</h1>
+        <div class="meta">Do you wanna go out sometime?</div>
+        
+        <div class="hero-cta">
+          <button id="watchTrailer" class="btn" aria-controls="trailerModal">▶ Watch Trailer</button>
+          <a href="#experience" class="btn secondary">Experience</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stills / Horizontal showcase -->
+<section class="stills-wrap" aria-labelledby="stills-heading">
+  <h2 id="stills-heading" class="font-serif text-xl mb-4" style="font-family:Cinzel,serif">Stills</h2>
+  <div class="horizontal-scroll" id="stills-scroll">
+
+    <div class="still-card" data-src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_1200,c_limit/ALONE_.00_04_02_20.Still003_wkkaqq.png">
+      <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_1200,c_limit/ALONE_.00_04_02_20.Still003_wkkaqq.png" alt="Still 1">
+      <div class="still-label"></div>
+    </div>
+
+    <div class="still-card" data-src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_1200,c_limit/ALONE_.00_00_12_18.Still001_lrgtd7.png">
+      <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_1200,c_limit/ALONE_.00_00_12_18.Still001_lrgtd7.png" alt="Still 2">
+      <div class="still-label"></div>
+    </div>
+
+    <div class="still-card" data-src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_1200,c_limit/ALONE_.00_01_02_06.Still002_duf47c.png">
+      <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_1200,c_limit/ALONE_.00_01_02_06.Still002_duf47c.png" alt="Still 3">
+      <div class="still-label"></div>
+    </div>
+
+    <div class="still-card" data-src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_1200,c_limit/samples/waves.png">
+      <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_webp,q_auto:good,w_1200,c_limit/samples/waves.png" alt="Still 4">
+      <div class="still-label"></div>
+    </div>
+
+  </div>
+</section>
+
+
+    <!-- Info / Synopsis & Credits -->
+    <section class="section" aria-labelledby="info-heading">
+      <div>
+        <h2 id="info-heading" class="subtitle font-serif text-2xl mb-4" style="font-family:Cinzel,serif">Synopsis</h2>
+        <div class="synopsis">
+          <div class="excerpt" id="excerpt">
+  <p>
+    Alone is the story of not a single person, but all of us in some way. It is about the solitude of every person and how even in a room full of people, one can feel so lonely. Beyond that, it also touches on themes of mental wellness and the need to care about not only our own mental health, but also that of the people around us.
+  </p>
+  <p>
+    So many people have problems they can’t say until you ask them to. It’s a message, a call for all of us to be that helping hand; the Light at the end of the tunnel.
+  </p>
+  <p class="quote">
+    "We came into this world alone, we will leave this world alone, but for as long as we are in this world, no-one should be left alone."
+  </p>
+</div>
+
+          <button id="expandBtn" class="expand-btn" aria-expanded="false">Read more</button>
+
+          <div class="mt-6">
+            <h3 class="font-semibold mb-2">Where to watch</h3>
+            <p class="muted-small">Festival circuit • YouTube • Private Screenings</p>
+          </div>
+
+          <div class="mt-6">
+            <h3 class="font-semibold mb-2">Cast</h3>
+            <ul class="list-disc pl-5">
+              <li><strong>David Edwards</strong> — Reggie</li>
+              <li><strong>Demilade Akin-Olaiya</strong> — Co-worker</li>
+              <li><strong>Olaitan Soeatan</strong> — Love Interest</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <aside class="credits-card" aria-labelledby="credits-heading">
+        <h4 id="credits-heading">Credits</h4>
+        <div class="credits-line"><strong>Director</strong><div class="muted-small">Emmanuel Patrick</div></div>
+        <div class="credits-line"><strong>Writer</strong><div class="muted-small">Emmanuel Patrick</div></div>
+        <div class="credits-line"><strong>Producer</strong><div class="muted-small">Emmanuel Patrick</div></div>
+        <div class="credits-line"><strong>Cinematographer</strong><div class="muted-small">Rapheal Kpenou</div></div>
+        <div class="credits-line mt-3"><strong>Running time</strong><div class="muted-small">4m 40s</div></div>
+        <div class="credits-line"><strong>Release year</strong><div class="muted-small">2025</div></div>
+      </aside>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <img src="https://i.imgur.com/xvqBrl0.png" alt="Patrick Creations logo">
+      <p class="font-bold">Patrick Creations</p>
+      <p class="opacity-70">Contact: <a href="mailto:emmanuelowochiopatrick@gmail.com" class="underline">emmanuelowochiopatrick@gmail.com</a> | <a href="tel:+2348163696389" class="underline">+234 816 369 6389</a></p>
+      <p class="font-bold opacity-80">Another Patrick Creation</p>
+      <p class="opacity-40">&copy; 2025 Patrick Creations. All rights reserved.</p>
+    </footer>
+
+  </main>
+
+  <!-- Trailer Modal (fixed) -->
+  <div id="trailerModal" class="trailer-modal" aria-hidden="true">
+    <div class="trailer-content">
+      <button id="closeTrailer" class="trailer-close" aria-label="Close trailer">✕</button>
+      <div class="trailer-video">
+        <iframe id="trailerFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <a href="https://youtu.be/hrrE6qM2vHo?si=w3eHZIgPvl6jz_J6" target="_blank" class="trailer-link">
+        Click here (if video doesn't load)
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarClose = document.getElementById('sidebarClose');
+
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sidebar.classList.add('open');
+      sidebar.setAttribute('aria-hidden','false');
+    });
+    sidebarClose.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      sidebar.setAttribute('aria-hidden','true');
+    });
+    document.addEventListener('click', (e) => {
+      if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== hamburger) {
+        sidebar.classList.remove('open');
+        sidebar.setAttribute('aria-hidden','true');
+      }
+    });
+
+    // Theme toggle with persistence
+    const themeSwitch = document.getElementById('themeSwitch');
+    function setTheme(dark){
+      if(dark){
+        document.documentElement.classList.add('dark-theme');
+        themeSwitch.classList.add('on');
+        themeSwitch.setAttribute('aria-pressed','true');
+        localStorage.setItem('theme','dark');
+      } else {
+        document.documentElement.classList.remove('dark-theme');
+        themeSwitch.classList.remove('on');
+        themeSwitch.setAttribute('aria-pressed','false');
+        localStorage.setItem('theme','light');
+      }
+    }
+    themeSwitch.addEventListener('click', ()=> setTheme(!document.documentElement.classList.contains('dark-theme')));
+    // keyboard toggle
+    themeSwitch.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); themeSwitch.click(); }});
+
+    if(localStorage.getItem('theme') === 'dark') setTheme(true);
+
+    // Stills click -> open hero slide-like modal (simple)
+    const stillCards = document.querySelectorAll('.still-card');
+    stillCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const src = card.getAttribute('data-src') || card.querySelector('img').src;
+        // open trailerModal as image viewer fallback
+        const trailerModal = document.getElementById('trailerModal');
+        const trailerFrame = document.getElementById('trailerFrame');
+        // use a simple image embed via data URL in iframe fallback (quick)
+        trailerFrame.src = src; // browsers can render images in iframes
+        trailerModal.classList.add('active');
+        trailerModal.setAttribute('aria-hidden','false');
+      });
+    });
+
+    // Trailer buttons — completely fixed YouTube solution
+    const watchTrailerBtn = document.getElementById('watchTrailer');
+    const trailerModal = document.getElementById('trailerModal');
+    const trailerFrame = document.getElementById('trailerFrame');
+    const closeTrailer = document.getElementById('closeTrailer');
+
+    watchTrailerBtn.addEventListener('click', () => {
+      // Fixed YouTube embed URL - using the correct video ID format
+      const videoId = 'v_HiNI7AY9A';
+      trailerFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+      trailerModal.classList.add('active');
+      trailerModal.setAttribute('aria-hidden','false');
+    });
+
+    closeTrailer.addEventListener('click', () => {
+      // Stop the video when closing
+      trailerFrame.src = "";
+      trailerModal.classList.remove('active');
+      trailerModal.setAttribute('aria-hidden','true');
+    });
+
+    trailerModal.addEventListener('click', (e) => {
+      if (e.target === trailerModal) {
+        closeTrailer.click();
+      }
+    });
+
+    // Expand synopsis
+    const expandBtn = document.getElementById('expandBtn');
+    const excerpt = document.getElementById('excerpt');
+    expandBtn.addEventListener('click', () => {
+      const isOpen = excerpt.classList.toggle('open');
+      expandBtn.textContent = isOpen ? 'Show less' : 'Read more';
+      expandBtn.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    // keyboard accessibility for escape to close modals & sidebars
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape'){
+        // close sidebar
+        if(sidebar.classList.contains('open')){ sidebar.classList.remove('open'); sidebar.setAttribute('aria-hidden','true'); }
+        // close trailer
+        if(trailerModal.classList.contains('active')){ closeTrailer.click(); }
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+</body>
+</html>
