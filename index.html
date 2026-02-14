@@ -204,12 +204,42 @@
     display: block;
     cursor: pointer;
   }
+  /* Restyled swiper navigation buttons with subtle white glow */
+.swiper-button-prev,
+.swiper-button-next {
+  background: rgba(255, 255, 255, 0.2) !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 9999px !important;
+  backdrop-filter: blur(4px) !important;
+  color: white !important;
+  transition: all 0.25s ease !important;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3) !important;
+  border: none !important;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: white !important;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Override any default swiper colors */
+.swiper-button-prev,
+.swiper-button-next {
+  --swiper-navigation-color: white;
+}
 </style>
 </head>
 <body>
-<div style="background:red;color:white;padding:40px;font-size:30px;">
-  VERCEL TEST — IF YOU SEE THIS, IT WORKED
-</div>
 
 <header class="topbar">
   <div class="logo flex items-center gap-3">
