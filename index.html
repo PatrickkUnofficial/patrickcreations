@@ -293,9 +293,49 @@
 .swiper-button-next {
   --swiper-navigation-color: white;
 }
+
+/* ===== PRELOADER – added without touching anything else ===== */
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  opacity: 1;
+  visibility: visible;
+}
+#preloader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#preloader img {
+  max-width: 180px;
+  width: 30vw;
+  animation: logoPulse 3s ease-in-out infinite;
+  display: block;
+}
+@keyframes logoPulse {
+  0%   { opacity: 0; transform: scale(0.95); }
+  15%  { opacity: 1; transform: scale(1); }
+  30%  { opacity: 0; transform: scale(0.98); }
+  45%  { opacity: 1; transform: scale(1); }
+  60%  { opacity: 0; transform: scale(0.98); }
+  75%  { opacity: 1; transform: scale(1); }
+  90%  { opacity: 0; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
 </style>
 </head>
 <body>
+
+<!-- ===== PRELOADER ELEMENT ===== -->
+<div id="preloader">
+  <img src="https://i.imgur.com/xvqBrl0.png" alt="Patrick Creations Logo">
+</div>
 
 <header class="topbar">
   <div class="logo flex items-center gap-3">
@@ -592,6 +632,15 @@
   });
 
   document.addEventListener('touchstart', function() {}, {passive: true});
+
+  // ===== PRELOADER: hide after everything loads =====
+  window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    preloader.classList.add('fade-out');
+    setTimeout(() => {
+      preloader.style.display = 'none';
+    }, 1000);
+  });
 </script>
 </body>
 </html>
