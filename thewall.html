@@ -200,23 +200,25 @@
             position: relative;
             cursor: pointer;
             transition: transform 0.4s, box-shadow 0.4s;
+            background: #e8e8e8; /* placeholder colour */
+            min-height: 180px; /* gives structure before image loads */
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.6s ease forwards;
         }
 
-        .grid-item:nth-child(1) { animation-delay: 0.1s; }
-        .grid-item:nth-child(2) { animation-delay: 0.2s; }
-        .grid-item:nth-child(3) { animation-delay: 0.3s; }
-        .grid-item:nth-child(4) { animation-delay: 0.4s; }
-        .grid-item:nth-child(5) { animation-delay: 0.5s; }
-        .grid-item:nth-child(6) { animation-delay: 0.6s; }
-        .grid-item:nth-child(7) { animation-delay: 0.7s; }
-        .grid-item:nth-child(8) { animation-delay: 0.8s; }
-        .grid-item:nth-child(9) { animation-delay: 0.9s; }
-        .grid-item:nth-child(10) { animation-delay: 1.0s; }
-        .grid-item:nth-child(11) { animation-delay: 1.1s; }
-        .grid-item:nth-child(12) { animation-delay: 1.2s; }
+        .grid-item:nth-child(1) { animation-delay: 0.05s; }
+        .grid-item:nth-child(2) { animation-delay: 0.1s; }
+        .grid-item:nth-child(3) { animation-delay: 0.15s; }
+        .grid-item:nth-child(4) { animation-delay: 0.2s; }
+        .grid-item:nth-child(5) { animation-delay: 0.25s; }
+        .grid-item:nth-child(6) { animation-delay: 0.3s; }
+        .grid-item:nth-child(7) { animation-delay: 0.35s; }
+        .grid-item:nth-child(8) { animation-delay: 0.4s; }
+        .grid-item:nth-child(9) { animation-delay: 0.45s; }
+        .grid-item:nth-child(10) { animation-delay: 0.5s; }
+        .grid-item:nth-child(11) { animation-delay: 0.55s; }
+        .grid-item:nth-child(12) { animation-delay: 0.6s; }
 
         @keyframes fadeInUp {
             to {
@@ -247,7 +249,7 @@
             height: auto;
             display: block;
             transition: transform 0.6s, filter 0.6s;
-            background: #f5f5f5;
+            background: #e8e8e8;
         }
         
         .grid-item:hover .grid-img {
@@ -394,56 +396,13 @@
             display: block;
         }
 
-        /* Loading optimization */
+        /* Remove the loading animation since we don't need it now */
         .grid-img {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* ===== PRELOADER – same as index ===== */
-        #preloader {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-            opacity: 1;
-            visibility: visible;
-        }
-        #preloader.fade-out {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        #preloader img {
-            max-width: 600px;
-            width: 70vw;
-            animation: logoPulse 5s ease-in-out infinite;
-            display: block;
-        }
-        @keyframes logoPulse {
-            0%   { opacity: 0; transform: scale(0.92); }
-            40%  { opacity: 1; transform: scale(1); }
-            70%  { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.92); }
+            background: #e8e8e8;
         }
     </style>
 </head>
 <body>
-
-<!-- ===== PRELOADER ===== -->
-<div id="preloader">
-    <img src="https://i.imgur.com/xvqBrl0.png" alt="Patrick Creations Logo">
-</div>
 
 <header class="topbar">
     <div class="logo flex items-center gap-3">
@@ -511,7 +470,7 @@
         
         <!-- Item 1: Still from The Brilliant Boy -->
         <div class="grid-item" data-category="stills">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759572607/TBB.00_03_07_12.Still006_tokxck.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759572607/TBB.00_03_07_12.Still006_tokxck.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">Still from The Brilliant Boy</h3>
                 <p class="grid-desc">Stills — The Brilliant Boy</p>
@@ -526,7 +485,7 @@
         
         <!-- Item 2: Still from The Brilliant Boy -->
         <div class="grid-item" data-category="stills">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759572607/TBB.00_01_55_19.Still003_ek8wgk.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759572607/TBB.00_01_55_19.Still003_ek8wgk.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">Still from The Brilliant Boy</h3>
                 <p class="grid-desc">Stills — The Brilliant Boy</p>
@@ -541,7 +500,7 @@
         
         <!-- Item 3: Still from The Brilliant Boy -->
         <div class="grid-item" data-category="stills">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759572607/TBB.00_03_09_01.Still005_ksauyl.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759572607/TBB.00_03_09_01.Still005_ksauyl.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">Still from The Brilliant Boy</h3>
                 <p class="grid-desc">Stills — The Brilliant Boy</p>
@@ -556,7 +515,7 @@
         
         <!-- Item 4: The Brilliant Boy Newspaper Art -->
         <div class="grid-item" data-category="concept-art">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759574955/Untitled_design_4_soxufy.png" alt="The Brilliant Boy Newspaper Art" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759574955/Untitled_design_4_soxufy.png" alt="The Brilliant Boy Newspaper Art" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">The Brilliant Boy Newspaper Art</h3>
                 <p class="grid-desc">Concept Art — The Brilliant Boy</p>
@@ -571,7 +530,7 @@
         
         <!-- Item 5: Oil&Water Set -->
         <div class="grid-item" data-category="production-design">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759575559/IMG_1538_lg6o34.jpg" alt="Oil&Water Set" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759575559/IMG_1538_lg6o34.jpg" alt="Oil&Water Set" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">Oil&amp;Water Set</h3>
                 <p class="grid-desc">Production Design — The Brilliant Boy</p>
@@ -586,7 +545,7 @@
         
         <!-- Item 6: Good Day for a Shoot -->
         <div class="grid-item" data-category="behind-scenes">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759575764/IMG_1650_drqhi0.jpg" alt="Behind the Scenes" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759575764/IMG_1650_drqhi0.jpg" alt="Behind the Scenes" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">Good Day for a Shoot</h3>
                 <p class="grid-desc">Behind the Scenes</p>
@@ -601,7 +560,7 @@
         
         <!-- Item 7: Oil&Water Set -->
         <div class="grid-item" data-category="production-design behind-scenes">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759575764/IMG_1585_eafbve.jpg" alt="Oil&Water Set" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759575764/IMG_1585_eafbve.jpg" alt="Oil&Water Set" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">Oil&Water Set</h3>
                 <p class="grid-desc">Production Design / Behind Scenes</p>
@@ -616,7 +575,7 @@
         
         <!-- Item 8: The Patrick Creations Family -->
         <div class="grid-item" data-category="behind-scenes">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759576147/IMG_1552_ek3oj4.jpg" alt="The Patrick Creations Family" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759576147/IMG_1552_ek3oj4.jpg" alt="The Patrick Creations Family" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">The Patrick Creations Family</h3>
                 <p class="grid-desc">Behind Scenes</p>
@@ -631,7 +590,7 @@
         
         <!-- Item 9: Next time you will not sleep on set -->
         <div class="grid-item" data-category="behind-scenes">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759576156/IMG_1510_ghdyj6.jpg" alt="Next time you will not sleep on set" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759576156/IMG_1510_ghdyj6.jpg" alt="Next time you will not sleep on set" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">Next time you will not sleep on set</h3>
                 <p class="grid-desc">Behind Scenes</p>
@@ -646,7 +605,7 @@
 
         <!-- Item 10: Production Design Detail -->
         <div class="grid-item" data-category="production-design">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759575764/IMG_1585_eafbve.jpg" alt="Production Design Detail" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759575764/IMG_1585_eafbve.jpg" alt="Production Design Detail" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">Production Design Detail</h3>
                 <p class="grid-desc">Set Design Elements</p>
@@ -661,7 +620,7 @@
         
         <!-- Item 11: Behind the Scenes Moment -->
         <div class="grid-item" data-category="behind-scenes">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759576147/IMG_1552_ek3oj4.jpg" alt="Behind the Scenes Moment" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759576147/IMG_1552_ek3oj4.jpg" alt="Behind the Scenes Moment" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">Behind the Scenes Moment</h3>
                 <p class="grid-desc">Capturing the Process</p>
@@ -676,7 +635,7 @@
         
         <!-- Item 12: Cinematic Still -->
         <div class="grid-item" data-category="stills">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto/v1759572607/TBB.00_03_07_12.Still006_tokxck.jpg" alt="Cinematic Still" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759572607/TBB.00_03_07_12.Still006_tokxck.jpg" alt="Cinematic Still" class="grid-img" loading="lazy" decoding="async">
             <div class="grid-overlay">
                 <h3 class="grid-title">Cinematic Still</h3>
                 <p class="grid-desc">Mood and Atmosphere</p>
@@ -719,38 +678,29 @@
 </main>
 
 <script>
-    // ===== PRELOADER: hide after Masonry + images are fully ready =====
-    const preloader = document.getElementById('preloader');
-
     // Main functionality
     document.addEventListener('DOMContentLoaded', function() {
         const grid = document.getElementById('lookbook-grid');
         let masonry;
 
-        // Wait for all images to load, then init Masonry and hide preloader
-        imagesLoaded(grid, function() {
-            // Initialize Masonry
-            masonry = new Masonry(grid, {
-                itemSelector: '.grid-item',
-                columnWidth: '.grid-sizer',
-                percentPosition: true,
-                gutter: 16,
-                transitionDuration: '0.3s'
-            });
+        // Initialize Masonry immediately
+        masonry = new Masonry(grid, {
+            itemSelector: '.grid-item',
+            columnWidth: '.grid-sizer',
+            percentPosition: true,
+            gutter: 16,
+            transitionDuration: '0.3s'
+        });
+        masonry.layout();
 
-            // Extra layout passes to catch any late-loading images
+        // Relayout as images load
+        imagesLoaded(grid, function() {
             masonry.layout();
             setTimeout(() => masonry.layout(), 200);
             setTimeout(() => masonry.layout(), 500);
-
-            // Hide preloader after everything is laid out
-            preloader.classList.add('fade-out');
-            setTimeout(() => {
-                preloader.style.display = 'none';
-            }, 1000);
         });
 
-        // Filter functionality (unchanged)
+        // Filter functionality
         const filterButtons = document.querySelectorAll('.filter-btn');
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -774,7 +724,7 @@
             });
         });
 
-        // Modal functionality (exactly as you had)
+        // Modal functionality
         const modal = document.getElementById('imageModal');
         const modalImage = document.getElementById('modalImage');
         const modalTitle = document.getElementById('modalTitle');
