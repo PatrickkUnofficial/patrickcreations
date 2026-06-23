@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patrick Creations — Lookbook</title>
     
-    <!-- Preconnect to speed up external resources -->
-    <link rel="preconnect" href="https://res.cloudinary.com">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
@@ -200,25 +195,23 @@
             position: relative;
             cursor: pointer;
             transition: transform 0.4s, box-shadow 0.4s;
-            background: #e8e8e8; /* placeholder colour */
-            min-height: 180px; /* gives structure before image loads */
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.6s ease forwards;
         }
 
-        .grid-item:nth-child(1) { animation-delay: 0.05s; }
-        .grid-item:nth-child(2) { animation-delay: 0.1s; }
-        .grid-item:nth-child(3) { animation-delay: 0.15s; }
-        .grid-item:nth-child(4) { animation-delay: 0.2s; }
-        .grid-item:nth-child(5) { animation-delay: 0.25s; }
-        .grid-item:nth-child(6) { animation-delay: 0.3s; }
-        .grid-item:nth-child(7) { animation-delay: 0.35s; }
-        .grid-item:nth-child(8) { animation-delay: 0.4s; }
-        .grid-item:nth-child(9) { animation-delay: 0.45s; }
-        .grid-item:nth-child(10) { animation-delay: 0.5s; }
-        .grid-item:nth-child(11) { animation-delay: 0.55s; }
-        .grid-item:nth-child(12) { animation-delay: 0.6s; }
+        .grid-item:nth-child(1) { animation-delay: 0.1s; }
+        .grid-item:nth-child(2) { animation-delay: 0.2s; }
+        .grid-item:nth-child(3) { animation-delay: 0.3s; }
+        .grid-item:nth-child(4) { animation-delay: 0.4s; }
+        .grid-item:nth-child(5) { animation-delay: 0.5s; }
+        .grid-item:nth-child(6) { animation-delay: 0.6s; }
+        .grid-item:nth-child(7) { animation-delay: 0.7s; }
+        .grid-item:nth-child(8) { animation-delay: 0.8s; }
+        .grid-item:nth-child(9) { animation-delay: 0.9s; }
+        .grid-item:nth-child(10) { animation-delay: 1.0s; }
+        .grid-item:nth-child(11) { animation-delay: 1.1s; }
+        .grid-item:nth-child(12) { animation-delay: 1.2s; }
 
         @keyframes fadeInUp {
             to {
@@ -249,7 +242,7 @@
             height: auto;
             display: block;
             transition: transform 0.6s, filter 0.6s;
-            background: #e8e8e8;
+            background: #f5f5f5;
         }
         
         .grid-item:hover .grid-img {
@@ -396,9 +389,16 @@
             display: block;
         }
 
-        /* Remove the loading animation since we don't need it now */
+        /* Loading optimization */
         .grid-img {
-            background: #e8e8e8;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
     </style>
 </head>
@@ -470,7 +470,7 @@
         
         <!-- Item 1: Still from The Brilliant Boy -->
         <div class="grid-item" data-category="stills">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759572607/TBB.00_03_07_12.Still006_tokxck.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759572607/TBB.00_03_07_12.Still006_tokxck.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">Still from The Brilliant Boy</h3>
                 <p class="grid-desc">Stills — The Brilliant Boy</p>
@@ -485,7 +485,7 @@
         
         <!-- Item 2: Still from The Brilliant Boy -->
         <div class="grid-item" data-category="stills">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759572607/TBB.00_01_55_19.Still003_ek8wgk.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759572607/TBB.00_01_55_19.Still003_ek8wgk.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">Still from The Brilliant Boy</h3>
                 <p class="grid-desc">Stills — The Brilliant Boy</p>
@@ -500,7 +500,7 @@
         
         <!-- Item 3: Still from The Brilliant Boy -->
         <div class="grid-item" data-category="stills">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759572607/TBB.00_03_09_01.Still005_ksauyl.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759572607/TBB.00_03_09_01.Still005_ksauyl.jpg" alt="Still from The Brilliant Boy" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">Still from The Brilliant Boy</h3>
                 <p class="grid-desc">Stills — The Brilliant Boy</p>
@@ -515,7 +515,7 @@
         
         <!-- Item 4: The Brilliant Boy Newspaper Art -->
         <div class="grid-item" data-category="concept-art">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759574955/Untitled_design_4_soxufy.png" alt="The Brilliant Boy Newspaper Art" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759574955/Untitled_design_4_soxufy.png" alt="The Brilliant Boy Newspaper Art" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">The Brilliant Boy Newspaper Art</h3>
                 <p class="grid-desc">Concept Art — The Brilliant Boy</p>
@@ -530,7 +530,7 @@
         
         <!-- Item 5: Oil&Water Set -->
         <div class="grid-item" data-category="production-design">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759575559/IMG_1538_lg6o34.jpg" alt="Oil&Water Set" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759575559/IMG_1538_lg6o34.jpg" alt="Oil&Water Set" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">Oil&amp;Water Set</h3>
                 <p class="grid-desc">Production Design — The Brilliant Boy</p>
@@ -545,7 +545,7 @@
         
         <!-- Item 6: Good Day for a Shoot -->
         <div class="grid-item" data-category="behind-scenes">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759575764/IMG_1650_drqhi0.jpg" alt="Behind the Scenes" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759575764/IMG_1650_drqhi0.jpg" alt="Behind the Scenes" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">Good Day for a Shoot</h3>
                 <p class="grid-desc">Behind the Scenes</p>
@@ -560,7 +560,7 @@
         
         <!-- Item 7: Oil&Water Set -->
         <div class="grid-item" data-category="production-design behind-scenes">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759575764/IMG_1585_eafbve.jpg" alt="Oil&Water Set" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759575764/IMG_1585_eafbve.jpg" alt="Oil&Water Set" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">Oil&Water Set</h3>
                 <p class="grid-desc">Production Design / Behind Scenes</p>
@@ -575,7 +575,7 @@
         
         <!-- Item 8: The Patrick Creations Family -->
         <div class="grid-item" data-category="behind-scenes">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759576147/IMG_1552_ek3oj4.jpg" alt="The Patrick Creations Family" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759576147/IMG_1552_ek3oj4.jpg" alt="The Patrick Creations Family" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">The Patrick Creations Family</h3>
                 <p class="grid-desc">Behind Scenes</p>
@@ -590,7 +590,7 @@
         
         <!-- Item 9: Next time you will not sleep on set -->
         <div class="grid-item" data-category="behind-scenes">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759576156/IMG_1510_ghdyj6.jpg" alt="Next time you will not sleep on set" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759576156/IMG_1510_ghdyj6.jpg" alt="Next time you will not sleep on set" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">Next time you will not sleep on set</h3>
                 <p class="grid-desc">Behind Scenes</p>
@@ -605,7 +605,7 @@
 
         <!-- Item 10: Production Design Detail -->
         <div class="grid-item" data-category="production-design">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759575764/IMG_1585_eafbve.jpg" alt="Production Design Detail" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759575764/IMG_1585_eafbve.jpg" alt="Production Design Detail" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">Production Design Detail</h3>
                 <p class="grid-desc">Set Design Elements</p>
@@ -620,7 +620,7 @@
         
         <!-- Item 11: Behind the Scenes Moment -->
         <div class="grid-item" data-category="behind-scenes">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759576147/IMG_1552_ek3oj4.jpg" alt="Behind the Scenes Moment" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759576147/IMG_1552_ek3oj4.jpg" alt="Behind the Scenes Moment" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">Behind the Scenes Moment</h3>
                 <p class="grid-desc">Capturing the Process</p>
@@ -635,7 +635,7 @@
         
         <!-- Item 12: Cinematic Still -->
         <div class="grid-item" data-category="stills">
-            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_auto,w_400/v1759572607/TBB.00_03_07_12.Still006_tokxck.jpg" alt="Cinematic Still" class="grid-img" loading="lazy" decoding="async">
+            <img src="https://res.cloudinary.com/dqbuevnsd/image/upload/f_auto,q_100/v1759572607/TBB.00_03_07_12.Still006_tokxck.jpg" alt="Cinematic Still" class="grid-img" loading="lazy">
             <div class="grid-overlay">
                 <h3 class="grid-title">Cinematic Still</h3>
                 <p class="grid-desc">Mood and Atmosphere</p>
@@ -678,52 +678,71 @@
 </main>
 
 <script>
-    // Main functionality
+    // Initialize Masonry - FIXED
     document.addEventListener('DOMContentLoaded', function() {
         const grid = document.getElementById('lookbook-grid');
         let masonry;
-
-        // Initialize Masonry immediately
-        masonry = new Masonry(grid, {
-            itemSelector: '.grid-item',
-            columnWidth: '.grid-sizer',
-            percentPosition: true,
-            gutter: 16,
-            transitionDuration: '0.3s'
-        });
-        masonry.layout();
-
-        // Relayout as images load
-        imagesLoaded(grid, function() {
-            masonry.layout();
-            setTimeout(() => masonry.layout(), 200);
-            setTimeout(() => masonry.layout(), 500);
-        });
-
+        
+        // Initialize masonry after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            masonry = new Masonry(grid, {
+                itemSelector: '.grid-item',
+                columnWidth: '.grid-sizer',
+                percentPosition: true,
+                gutter: 16,
+                transitionDuration: '0.3s'
+            });
+            
+            // Use imagesLoaded with proper configuration
+            imagesLoaded(grid, function() {
+                masonry.layout();
+                
+                // Multiple layout calls to ensure proper positioning
+                setTimeout(() => masonry.layout(), 100);
+                setTimeout(() => masonry.layout(), 300);
+                setTimeout(() => masonry.layout(), 600);
+            });
+        }, 100);
+        
         // Filter functionality
         const filterButtons = document.querySelectorAll('.filter-btn');
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
+                // Update active state
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
-
+                
                 const filter = button.getAttribute('data-filter');
-                document.querySelectorAll('.grid-item').forEach(item => {
-                    const cats = item.getAttribute('data-category') || '';
-                    if (filter === 'all' || cats.includes(filter)) {
+                
+                // Show all if "all" is selected
+                if (filter === 'all') {
+                    document.querySelectorAll('.grid-item').forEach(item => {
                         item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-
+                    });
+                } else {
+                    // Hide items that don't match the filter
+                    document.querySelectorAll('.grid-item').forEach(item => {
+                        const cats = item.getAttribute('data-category') || '';
+                        if (cats.includes(filter)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
+                
+                // Re-layout masonry after filtering with proper timing
                 if (masonry) {
-                    setTimeout(() => masonry.layout(), 50);
-                    setTimeout(() => masonry.layout(), 200);
+                    setTimeout(() => {
+                        masonry.layout();
+                    }, 50);
+                    setTimeout(() => {
+                        masonry.layout();
+                    }, 200);
                 }
             });
         });
-
+        
         // Modal functionality
         const modal = document.getElementById('imageModal');
         const modalImage = document.getElementById('modalImage');
@@ -731,38 +750,40 @@
         const modalDesc = document.getElementById('modalDesc');
         const modalPalette = document.getElementById('modalPalette');
         const modalClose = document.getElementById('modalClose');
-
+        
         document.querySelectorAll('.grid-item').forEach(item => {
             item.addEventListener('click', () => {
                 const img = item.querySelector('img');
                 const title = item.querySelector('.grid-title').textContent;
                 const desc = item.querySelector('.grid-desc').textContent;
                 const paletteHTML = item.querySelector('.color-palette').innerHTML;
-
+                
                 modalImage.src = img.src;
                 modalTitle.textContent = title;
                 modalDesc.textContent = desc;
                 modalPalette.innerHTML = paletteHTML;
-
+                
                 modal.classList.add('open');
                 document.body.style.overflow = 'hidden';
             });
         });
-
+        
         modalClose.addEventListener('click', () => {
             modal.classList.remove('open');
             document.body.style.overflow = 'auto';
         });
-
+        
+        // Close modal when clicking outside
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.remove('open');
                 document.body.style.overflow = 'auto';
             }
         });
-
-        // Back to top
+        
+        // Back to top functionality
         const backToTopBtn = document.getElementById('backToTop');
+        
         window.addEventListener('scroll', () => {
             if (window.pageYOffset > 300) {
                 backToTopBtn.classList.add('visible');
@@ -770,20 +791,31 @@
                 backToTopBtn.classList.remove('visible');
             }
         });
-
+        
         backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
-
-        // Re-layout on resize
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => masonry && masonry.layout(), 200);
+        
+        // Window resize handler to re-layout masonry
+        window.addEventListener('resize', function() {
+            if (masonry) {
+                setTimeout(() => masonry.layout(), 100);
+            }
+        });
+        
+        // Force layout on window load
+        window.addEventListener('load', function() {
+            if (masonry) {
+                setTimeout(() => masonry.layout(), 500);
+                setTimeout(() => masonry.layout(), 1000);
+            }
         });
     });
-
-    // Sidebar
+    
+    // Existing functionality from your code
     const hamburger = document.getElementById('hamburger');
     const sidebar = document.getElementById('sidebar');
     const sidebarClose = document.getElementById('sidebarClose');
