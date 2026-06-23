@@ -294,7 +294,7 @@
   --swiper-navigation-color: white;
 }
 
-/* ===== PRELOADER – added without touching anything else ===== */
+/* ===== PRELOADER – smooth slow fade in/out, no pop-back ===== */
 #preloader {
   position: fixed;
   inset: 0;
@@ -315,18 +315,14 @@
 #preloader img {
   max-width: 180px;
   width: 30vw;
-  animation: logoPulse 3s ease-in-out infinite;
+  animation: logoPulse 5s ease-in-out infinite;
   display: block;
 }
 @keyframes logoPulse {
-  0%   { opacity: 0; transform: scale(0.95); }
-  15%  { opacity: 1; transform: scale(1); }
-  30%  { opacity: 0; transform: scale(0.98); }
-  45%  { opacity: 1; transform: scale(1); }
-  60%  { opacity: 0; transform: scale(0.98); }
-  75%  { opacity: 1; transform: scale(1); }
-  90%  { opacity: 0; transform: scale(0.98); }
-  100% { opacity: 1; transform: scale(1); }
+  0%   { opacity: 0; transform: scale(0.92); }
+  40%  { opacity: 1; transform: scale(1); }
+  70%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.92); }
 }
 </style>
 </head>
